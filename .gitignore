@@ -58,6 +58,11 @@ roberta_reaction_classifier/checkpoint-*/
 *.ckpt
 *.pth
 
+# Large model files - too big for GitHub (476MB)
+# Model should be downloaded separately or trained
+roberta_reaction_classifier/best_model/*.safetensors
+roberta_reaction_classifier/best_model/*.bin
+
 # Temporary files
 *.log
 *.tmp
