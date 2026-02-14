@@ -1,0 +1,320 @@
+СТАТИСТИКА ДЛЯ КАЖДОГО ГРАФИКА
+================================================================================
+
+--------------------------------------------------------------------------------
+ГРАФИК 1: Top-15 Strategies Leading to Not Interested
+--------------------------------------------------------------------------------
+
+Всего стратегий в графике: 15
+Общее количество пар: 3936
+
+Детальная статистика:
+
+Guilt Induction:
+   - Not Interested: 24.5% (26 из 106)
+   - Neutral: 49.1% (52)
+   - Interested: 26.4% (28)
+   - Всего пар: 106
+
+Fear Appeal:
+   - Not Interested: 20.6% (13 из 63)
+   - Neutral: 58.7% (37)
+   - Interested: 20.6% (13)
+   - Всего пар: 63
+
+Sympathy Appeal:
+   - Not Interested: 20.0% (7 из 35)
+   - Neutral: 68.6% (24)
+   - Interested: 11.4% (4)
+   - Всего пар: 35
+
+Greeting / Rapport:
+   - Not Interested: 19.6% (204 из 1043)
+   - Neutral: 77.7% (810)
+   - Interested: 2.8% (29)
+   - Всего пар: 1043
+
+Logical Appeal:
+   - Not Interested: 16.2% (6 из 37)
+   - Neutral: 59.5% (22)
+   - Interested: 24.3% (9)
+   - Всего пар: 37
+
+Qualification / Segmentation:
+   - Not Interested: 15.3% (19 из 124)
+   - Neutral: 75.0% (93)
+   - Interested: 9.7% (12)
+   - Всего пар: 124
+
+Self-feeling Appeal:
+   - Not Interested: 14.7% (16 из 109)
+   - Neutral: 56.9% (62)
+   - Interested: 28.4% (31)
+   - Всего пар: 109
+
+Pre-giving:
+   - Not Interested: 12.2% (6 из 49)
+   - Neutral: 32.7% (16)
+   - Interested: 55.1% (27)
+   - Всего пар: 49
+
+Unity:
+   - Not Interested: 12.2% (5 из 41)
+   - Neutral: 48.8% (20)
+   - Interested: 39.0% (16)
+   - Всего пар: 41
+
+Donation Baseline / Habit Probe:
+   - Not Interested: 12.1% (36 из 297)
+   - Neutral: 42.4% (126)
+   - Interested: 45.5% (135)
+   - Всего пар: 297
+
+Moral Appeal:
+   - Not Interested: 12.1% (53 из 438)
+   - Neutral: 58.4% (256)
+   - Interested: 29.5% (129)
+   - Всего пар: 438
+
+Conversation Closing:
+   - Not Interested: 11.4% (26 из 228)
+   - Neutral: 78.5% (179)
+   - Interested: 10.1% (23)
+   - Всего пар: 228
+
+Empathy Appeal:
+   - Not Interested: 9.8% (23 из 234)
+   - Neutral: 67.5% (158)
+   - Interested: 22.6% (53)
+   - Всего пар: 234
+
+Call to Action:
+   - Not Interested: 9.8% (50 из 510)
+   - Neutral: 35.1% (179)
+   - Interested: 55.1% (281)
+   - Всего пар: 510
+
+Framing:
+   - Not Interested: 8.8% (55 из 622)
+   - Neutral: 46.1% (287)
+   - Interested: 45.0% (280)
+   - Всего пар: 622
+
+--------------------------------------------------------------------------------
+ГРАФИК 2: Top-15 Strategies Leading to Interested
+--------------------------------------------------------------------------------
+
+Всего стратегий в графике: 15
+Общее количество пар: 3697
+
+Детальная статистика:
+
+Commitment and Consistency:
+   - Interested: 61.6% (122 из 198)
+   - Neutral: 32.3% (64)
+   - Not Interested: 6.1% (12)
+   - Всего пар: 198
+
+Foot-in-the-door:
+   - Interested: 61.5% (24 из 39)
+   - Neutral: 33.3% (13)
+   - Not Interested: 5.1% (2)
+   - Всего пар: 39
+
+Reciprocity:
+   - Interested: 56.4% (44 из 78)
+   - Neutral: 35.9% (28)
+   - Not Interested: 7.7% (6)
+   - Всего пар: 78
+
+Pre-giving:
+   - Interested: 55.1% (27 из 49)
+   - Neutral: 32.7% (16)
+   - Not Interested: 12.2% (6)
+   - Всего пар: 49
+
+Call to Action:
+   - Interested: 55.1% (281 из 510)
+   - Neutral: 35.1% (179)
+   - Not Interested: 9.8% (50)
+   - Всего пар: 510
+
+Activation of Personal Commitment:
+   - Interested: 50.0% (38 из 76)
+   - Neutral: 42.1% (32)
+   - Not Interested: 7.9% (6)
+   - Всего пар: 76
+
+Rewarding Activity:
+   - Interested: 47.4% (27 из 57)
+   - Neutral: 45.6% (26)
+   - Not Interested: 7.0% (4)
+   - Всего пар: 57
+
+Donation Baseline / Habit Probe:
+   - Interested: 45.5% (135 из 297)
+   - Neutral: 42.4% (126)
+   - Not Interested: 12.1% (36)
+   - Всего пар: 297
+
+Framing:
+   - Interested: 45.0% (280 из 622)
+   - Neutral: 46.1% (287)
+   - Not Interested: 8.8% (55)
+   - Всего пар: 622
+
+Unity:
+   - Interested: 39.0% (16 из 41)
+   - Neutral: 48.8% (20)
+   - Not Interested: 12.2% (5)
+   - Всего пар: 41
+
+Social Proof:
+   - Interested: 37.3% (57 из 153)
+   - Neutral: 55.6% (85)
+   - Not Interested: 7.2% (11)
+   - Всего пар: 153
+
+Logistics / Coordination:
+   - Interested: 34.1% (101 из 296)
+   - Neutral: 63.5% (188)
+   - Not Interested: 2.4% (7)
+   - Всего пар: 296
+
+Moral Appeal:
+   - Interested: 29.5% (129 из 438)
+   - Neutral: 58.4% (256)
+   - Not Interested: 12.1% (53)
+   - Всего пар: 438
+
+Self-feeling Appeal:
+   - Interested: 28.4% (31 из 109)
+   - Neutral: 56.9% (62)
+   - Not Interested: 14.7% (16)
+   - Всего пар: 109
+
+Rational Appeal:
+   - Interested: 27.1% (199 из 734)
+   - Neutral: 68.4% (502)
+   - Not Interested: 4.5% (33)
+   - Всего пар: 734
+
+--------------------------------------------------------------------------------
+ГРАФИК 3: Strategy × Interest Correlation Matrix (Top-20 Strategies)
+--------------------------------------------------------------------------------
+
+Всего стратегий в heatmap: 20
+Общее количество пар: 8415
+
+Детальная статистика по каждой стратегии:
+
+Greeting / Rapport:
+   - Not Interested: 19.6% (204 из 1043)
+   - Neutral: 77.7% (810 из 1043)
+   - Interested: 2.8% (29 из 1043)
+
+Acknowledgement:
+   - Not Interested: 6.4% (56 из 871)
+   - Neutral: 72.7% (633 из 871)
+   - Interested: 20.9% (182 из 871)
+
+Charity Awareness Probe:
+   - Not Interested: 8.5% (63 из 739)
+   - Neutral: 77.5% (573 из 739)
+   - Interested: 13.9% (103 из 739)
+
+Rational Appeal:
+   - Not Interested: 4.5% (33 из 734)
+   - Neutral: 68.4% (502 из 734)
+   - Interested: 27.1% (199 из 734)
+
+Framing:
+   - Not Interested: 8.8% (55 из 622)
+   - Neutral: 46.1% (287 из 622)
+   - Interested: 45.0% (280 из 622)
+
+Non-persuasive Other:
+   - Not Interested: 8.4% (46 из 547)
+   - Neutral: 78.2% (428 из 547)
+   - Interested: 13.3% (73 из 547)
+
+Credibility Appeal:
+   - Not Interested: 7.5% (41 из 544)
+   - Neutral: 68.2% (371 из 544)
+   - Interested: 24.3% (132 из 544)
+
+Call to Action:
+   - Not Interested: 9.8% (50 из 510)
+   - Neutral: 35.1% (179 из 510)
+   - Interested: 55.1% (281 из 510)
+
+Appeal to Values:
+   - Not Interested: 8.8% (42 из 476)
+   - Neutral: 65.1% (310 из 476)
+   - Interested: 26.1% (124 из 476)
+
+Moral Appeal:
+   - Not Interested: 12.1% (53 из 438)
+   - Neutral: 58.4% (256 из 438)
+   - Interested: 29.5% (129 из 438)
+
+Donation Baseline / Habit Probe:
+   - Not Interested: 12.1% (36 из 297)
+   - Neutral: 42.4% (126 из 297)
+   - Interested: 45.5% (135 из 297)
+
+Logistics / Coordination:
+   - Not Interested: 2.4% (7 из 296)
+   - Neutral: 63.5% (188 из 296)
+   - Interested: 34.1% (101 из 296)
+
+Empathy Appeal:
+   - Not Interested: 9.8% (23 из 234)
+   - Neutral: 67.5% (158 из 234)
+   - Interested: 22.6% (53 из 234)
+
+Conversation Closing:
+   - Not Interested: 11.4% (26 из 228)
+   - Neutral: 78.5% (179 из 228)
+   - Interested: 10.1% (23 из 228)
+
+Commitment and Consistency:
+   - Not Interested: 6.1% (12 из 198)
+   - Neutral: 32.3% (64 из 198)
+   - Interested: 61.6% (122 из 198)
+
+Social Proof:
+   - Not Interested: 7.2% (11 из 153)
+   - Neutral: 55.6% (85 из 153)
+   - Interested: 37.3% (57 из 153)
+
+Storytelling:
+   - Not Interested: 8.2% (12 из 146)
+   - Neutral: 67.1% (98 из 146)
+   - Interested: 24.7% (36 из 146)
+
+Qualification / Segmentation:
+   - Not Interested: 15.3% (19 из 124)
+   - Neutral: 75.0% (93 из 124)
+   - Interested: 9.7% (12 из 124)
+
+Self-feeling Appeal:
+   - Not Interested: 14.7% (16 из 109)
+   - Neutral: 56.9% (62 из 109)
+   - Interested: 28.4% (31 из 109)
+
+Guilt Induction:
+   - Not Interested: 24.5% (26 из 106)
+   - Neutral: 49.1% (52 из 106)
+   - Interested: 26.4% (28 из 106)
+
+================================================================================
+✅ АНАЛИЗ ЗАВЕРШЕН
+================================================================================
+
+Созданные файлы:
+   - strategy_interest_stats.csv
+   - strategy_interest_pairs.csv
+   - strategies_leading_to_not_interested.png (Bar chart)
+   - strategies_leading_to_interested.png (Bar chart)
+   - strategy_interest_heatmap.png (Heatmap)

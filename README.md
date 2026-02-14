@@ -1,175 +1,156 @@
-# BSP2: Анализ диалогов убеждения
+# BSP2: Persuasion Dialogue Analysis
 
-Проект для анализа диалогов убеждения (persuasion dialogues), где один участник (persuader) пытается убедить другого (target) сделать пожертвование.
+Project for analyzing persuasion dialogues where one participant (persuader) attempts to convince another (target) to make a donation.
 
-## 📋 Описание проекта
+## 📋 Project Description
 
-Проект решает три основные задачи:
+The project solves three main tasks:
 
-1. **Задача 1: Анализ тональности (Sentiment Analysis)**
-   - Определение общей тональности общения в диалоге
-   - Классификация: negative, neutral, positive
-   - Используется модель `cardiffnlp/twitter-roberta-base-sentiment`
+1. **Task 1: Sentiment Analysis**
+   - Determining the overall emotional tone of communication in the dialogue
+   - Classification: negative, neutral, positive
+   - Uses `cardiffnlp/twitter-roberta-base-sentiment` model
 
-2. **Задача 2: Определение заинтересованности в донате (Interest Classification)**
-   - Классификация реакций убеждаемого: отказ/нейтрально/заинтересован
-   - Используется LLM (Ollama) для классификации с учетом контекста диалога
-   - Три категории: Not Interested (0), Neutral (1), Interested (2)
+2. **Task 2: Interest in Donation Classification**
+   - Classifying target reactions: refusal/neutral/interested
+   - Uses LLM (Ollama) for classification with full dialog context
+   - Three categories: Not Interested (0), Neutral (1), Interested (2)
 
-3. **Задача 3: Определение стратегий убеждения (Strategy Classification)**
-   - Определение стратегий убеждения, используемых persuader'ом
-   - 42 стратегии, организованные в 11 иерархических категорий
-   - Используется иерархическая классификация через LLM (Ollama)
+3. **Task 3: Persuasion Strategy Classification**
+   - Identifying persuasion strategies used by the persuader
+   - 42 strategies organized into 11 hierarchical categories
+   - Uses hierarchical classification via LLM (Ollama)
 
-## 🎯 Основные результаты
+## 🎯 Main Results
 
-### Финальные данные
-- `full_dialog_with_all_analysis.csv` - полный диалог со всеми анализами (sentiment, interest, strategies)
+### Final Data
+- `full_dialog_with_all_analysis.csv` - complete dialog with all analyses (sentiment, interest, strategies)
 
-### Анализ тональности
-- `sentiment_v2_summary.csv` - сводная статистика по тональности
-- `sentiment_v2_dialog_stats.csv` - статистика по диалогам
-- `sentiment_v2_details.csv` - детальная информация
-- `sentiment_v2_analysis.png` - визуализация анализа
-- `sentiment_donation_correlation.png` - корреляция тональности и донатов
+### Sentiment Analysis
+- `sentiment_v2_summary.csv` - sentiment summary statistics
+- `sentiment_v2_dialog_stats.csv` - dialog statistics
+- `sentiment_v2_details.csv` - detailed information
+- `sentiment_v2_analysis.png` - analysis visualization
+- `sentiment_donation_correlation.png` - correlation between sentiment and donations
 
-### Анализ заинтересованности
-- `interest_v2_summary.csv` - сводная статистика по заинтересованности
-- `interest_v2_dialog_stats.csv` - статистика по диалогам
-- `interest_v2_details.csv` - детальная информация
-- `interest_v2_analysis.png` - визуализация анализа
-- `interest_donation_correlation.png` - корреляция заинтересованности и донатов
-- `interest_donation_summary.csv` - сводка по корреляции с донатами
+### Interest Analysis
+- `interest_v2_summary.csv` - interest summary statistics
+- `interest_v2_dialog_stats.csv` - dialog statistics
+- `interest_v2_details.csv` - detailed information
+- `interest_v2_analysis.png` - analysis visualization
+- `interest_donation_correlation.png` - correlation between interest and donations
+- `interest_donation_summary.csv` - donation correlation summary
 
-### Анализ стратегий
-- `task3_single_summary.csv` - сводная статистика по стратегиям
-- `task3_single_dialog_stats.csv` - статистика по диалогам
-- `task3_single_category_details.csv` - детали по категориям
-- `task3_single_strategy_details.csv` - детали по стратегиям
-- `task3_single_analysis.png` - визуализация анализа
-- `strategy_donation_stats.csv` - корреляция стратегий и донатов
-- `strategy_interest_stats.csv` - корреляция стратегий и заинтересованности
-- `strategy_sentiment_stats.csv` - корреляция стратегий и тональности
+### Strategy Analysis
+- `task3_single_summary.csv` - strategy summary statistics
+- `task3_single_dialog_stats.csv` - dialog statistics
+- `task3_single_category_details.csv` - category details
+- `task3_single_strategy_details.csv` - strategy details
+- `task3_single_analysis.png` - analysis visualization
+- `strategy_donation_stats.csv` - correlation between strategies and donations
+- `strategy_interest_stats.csv` - correlation between strategies and interest
+- `strategy_sentiment_stats.csv` - correlation between strategies and sentiment
 
-### Анализ донатов
-- `donation_dataset_stats.csv` - статистика по донатам
-- `donation_analysis.png` - визуализация анализа донатов
-- `donation_by_role.png` - донаты по ролям
-- `donation_amount_distribution.png` - распределение сумм донатов
+### Donation Analysis
+- `donation_dataset_stats.csv` - donation statistics
+- `donation_analysis.png` - donation analysis visualization
+- `donation_by_role.png` - donations by role
+- `donation_amount_distribution.png` - donation amount distribution
 
-### Совместный анализ
-- `joint_strategies_stats.csv` - статистика совместного эффекта стратегий
-- `joint_strategies_effect.png` - визуализация совместного эффекта
+### Joint Analysis
+- `joint_strategies_stats.csv` - joint strategy effect statistics
+- `joint_strategies_effect.png` - joint effect visualization
 
-## 📁 Структура проекта
+## 📁 Project Structure
 
 ```
 bsp2/
-├── README.md                          # Этот файл
-├── PROJECT_DOCUMENTATION.md            # Подробная документация проекта
-├── TASK1_SENTIMENT.md                  # Документация задачи 1
-├── TASK2_INTEREST_IN_DONATION.md      # Документация задачи 2
-├── TASK3_STRATEGIES.md                 # Документация задачи 3
-├── strategies_sources.md               # Источники стратегий
-├── STRATEGIES_IMPROVEMENTS.md          # Улучшения стратегий
+├── README.md                          # This file
+├── PROJECT_DOCUMENTATION.md            # Detailed project documentation
+├── TASK1_SENTIMENT.md                  # Task 1 documentation
+├── TASK2_INTEREST_IN_DONATION.md      # Task 2 documentation
+├── TASK3_STRATEGIES.md                 # Task 3 documentation
+├── strategies_sources.md               # Strategy sources
+├── STRATEGIES_IMPROVEMENTS.md          # Strategy improvements
 │
-├── bsp2/                              # Основные скрипты
-│   ├── llama_sentiment.py             # LLM классификация тональности
-│   ├── llama_interest.py              # LLM классификация заинтересованности
-│   ├── llama_strategies.py            # LLM классификация стратегий
-│   ├── llama_task3.py                 # Иерархическая классификация стратегий
-│   └── strategies_hierarchical.py     # Иерархическая структура стратегий
+├── bsp2/                              # Main scripts
+│   ├── llama_sentiment.py             # LLM sentiment classification
+│   ├── llama_interest.py              # LLM interest classification
+│   ├── llama_strategies.py            # LLM strategy classification
+│   └── strategies_hierarchical.py     # Hierarchical strategy structure
 │
-├── analyze_*.py                        # Скрипты анализа результатов
-├── merge_all_analysis_results.py      # Объединение всех анализов
+├── analyze_*.py                        # Result analysis scripts
+├── merge_all_analysis_results.py      # Merge all analyses
 │
-├── roberta_reaction_classifier/       # Обученная модель RoBERTa
-│   └── best_model/                    # Лучшая модель
-│
-├── reaction_calibrator.joblib         # Калибратор реакций
-│
-├── 14feb/                             # Web интерфейс для визуализации
-│   ├── index.html
-│   ├── script.js
-│   ├── style.css
-│   └── start_server.py
-│
-└── *.csv, *.png                       # Результаты анализа
+└── *.csv, *.png                       # Analysis results
 ```
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
-### Установка зависимостей
+### Installing Dependencies
 
 ```bash
 python3 -m venv venv
-source venv/bin/activate  # На Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Использование
+### Usage
 
-1. **Запуск анализа:**
-   - Используйте скрипты в директории `bsp2/` для классификации
-   - Используйте скрипты `analyze_*.py` для анализа результатов
+1. **Running Analysis:**
+   - Use scripts in `bsp2/` directory for classification
+   - Use `analyze_*.py` scripts for result analysis
 
-2. **Объединение результатов:**
+2. **Merging Results:**
    ```bash
    python merge_all_analysis_results.py
    ```
 
-3. **Запуск web интерфейса:**
-   ```bash
-   cd 14feb
-   python start_server.py
-   ```
-
-## 📊 Методы и модели
+## 📊 Methods and Models
 
 ### Sentiment Analysis
-- **Модель:** `cardiffnlp/twitter-roberta-base-sentiment`
-- **Метод:** Предобученная модель для анализа тональности
+- **Model:** `cardiffnlp/twitter-roberta-base-sentiment`
+- **Method:** Pre-trained model for sentiment analysis
 
 ### Interest Classification
-- **Модель:** LLM через Ollama API (qwen3:30b)
-- **Метод:** Batch-обработка диалогов с полным контекстом
-- **Альтернатива:** Fine-tuned RoBERTa модель (в `roberta_reaction_classifier/`)
+- **Model:** LLM via Ollama API (qwen3:30b)
+- **Method:** Batch processing of dialogs with full context
 
 ### Strategy Classification
-- **Модель:** LLM через Ollama API (qwen3:30b)
-- **Метод:** Иерархическая классификация (сначала категория, потом стратегия)
-- **Структура:** 11 категорий, 42 стратегии
+- **Model:** LLM via Ollama API (qwen3:30b)
+- **Method:** Hierarchical classification (category first, then strategy)
+- **Structure:** 11 categories, 42 strategies
 
-## 📈 Результаты
+## 📈 Results
 
-Все результаты анализа сохранены в CSV файлах и визуализированы в PNG файлах. Основные метрики:
+All analysis results are saved in CSV files and visualized in PNG files. Main metrics:
 
-- **Sentiment:** Распределение тональности по диалогам
-- **Interest:** Корреляция заинтересованности с донатами
-- **Strategies:** Эффективность различных стратегий убеждения
-- **Donations:** Статистика и распределение донатов
+- **Sentiment:** Sentiment distribution across dialogs
+- **Interest:** Correlation between interest and donations
+- **Strategies:** Effectiveness of various persuasion strategies
+- **Donations:** Statistics and distribution of donations
 
-## 📚 Документация
+## 📚 Documentation
 
-Подробная документация доступна в файлах:
-- `PROJECT_DOCUMENTATION.md` - полная документация проекта
-- `TASK1_SENTIMENT.md` - детали задачи 1
-- `TASK2_INTEREST_IN_DONATION.md` - детали задачи 2
-- `TASK3_STRATEGIES.md` - детали задачи 3
+Detailed documentation is available in:
+- `PROJECT_DOCUMENTATION.md` - full project documentation
+- `TASK1_SENTIMENT.md` - Task 1 details
+- `TASK2_INTEREST_IN_DONATION.md` - Task 2 details
+- `TASK3_STRATEGIES.md` - Task 3 details
 
-## 🔧 Требования
+## 🔧 Requirements
 
 - Python 3.9+
 - PyTorch
 - Transformers
 - Pandas, NumPy
 - Matplotlib, Seaborn
-- Ollama (для LLM классификации)
+- Ollama (for LLM classification)
 
-## 📝 Лицензия
+## 📝 License
 
-Проект создан в образовательных целях.
+Project created for educational purposes.
 
-## 👤 Автор
+## 👤 Author
 
-Проект BSP2 - анализ диалогов убеждения
+BSP2 Project - Persuasion Dialogue Analysis

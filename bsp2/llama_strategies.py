@@ -166,7 +166,7 @@ for msg_data in tqdm(all_persuader_messages, desc="Processing messages"):
     # Build context text from last 5 messages
     context_text = "\n".join(context_messages) if context_messages else "No previous messages in this dialog."
     
-    # Формируем промпт
+    # Build prompt
     prompt = f"""You are a hierarchical persuasion strategy classification system.
 
 Your task is to classify ONE persuader message using a TWO-STEP HIERARCHICAL APPROACH.

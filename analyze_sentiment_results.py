@@ -5,18 +5,18 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 print("="*80)
-print("АНАЛИЗ РЕЗУЛЬТАТОВ test_batch_sentiment_results.csv")
+print("ANALYZING RESULTS FROM test_batch_sentiment_results.csv")
 print("="*80)
 
-# Загружаем данные
-print("\n1. Загружаем данные...")
+# Load data
+print("\n1. Loading data...")
 df = pd.read_csv("test_batch_sentiment_results.csv")
 
-print(f"   - Всего строк: {len(df):,}")
-print(f"   - Target сообщений (B4=1): {len(df[df['B4'] == 1]):,}")
-print(f"   - Persuader сообщений (B4=0): {len(df[df['B4'] == 0]):,}")
+print(f"   - Total rows: {len(df):,}")
+print(f"   - Target messages (B4=1): {len(df[df['B4'] == 1]):,}")
+print(f"   - Persuader messages (B4=0): {len(df[df['B4'] == 0]):,}")
 
-# Анализ sentiment
+# Analyze sentiment
 target_messages = df[df['B4'] == 1].copy()
 
 sentiment_filled = target_messages[
@@ -24,33 +24,33 @@ sentiment_filled = target_messages[
     (target_messages['sentiment_ollama'].astype(str).str.strip() != '')
 ]
 
-print(f"\n2. Статистика по sentiment:")
-print(f"   - Всего target сообщений: {len(target_messages):,}")
-print(f"   - Сообщений с sentiment: {len(sentiment_filled):,}")
-print(f"   - Процент проанализированных: {len(sentiment_filled)/len(target_messages)*100:.1f}%")
-print(f"   - Сообщений без sentiment: {len(target_messages) - len(sentiment_filled):,}")
+print(f"\n2. Sentiment statistics:")
+print(f"   - Total target messages: {len(target_messages):,}")
+print(f"   - Messages with sentiment: {len(sentiment_filled):,}")
+print(f"   - Analysis coverage: {len(sentiment_filled)/len(target_messages)*100:.1f}%")
+print(f"   - Messages without sentiment: {len(target_messages) - len(sentiment_filled):,}")
 
-# ========= 1. РАСПРЕДЕЛЕНИЕ ПО SENTIMENT =========
+# ========= 1. SENTIMENT DISTRIBUTION =========
 print("\n" + "="*80)
-print("РАСПРЕДЕЛЕНИЕ ПО SENTIMENT")
+print("SENTIMENT DISTRIBUTION")
 print("="*80)
 
 if len(sentiment_filled) > 0:
     sentiment_counts = sentiment_filled['sentiment_ollama'].value_counts()
-    print(f"\nВсего уникальных sentiment: {len(sentiment_counts)}")
-    print(f"\nРаспределение:")
+    print(f"\nTotal unique sentiments: {len(sentiment_counts)}")
+    print(f"\nDistribution:")
     
     total = len(sentiment_filled)
     for sentiment, count in sentiment_counts.items():
         pct = count / total * 100
         print(f"   {sentiment:10s}: {count:5d} ({pct:5.2f}%)")
 else:
-    print("\n⚠️ Нет проанализированных сообщений!")
+    print("\n⚠️ No analyzed messages found!")
     sentiment_counts = pd.Series()
 
-# ========= 2. АНАЛИЗ ПО ДИАЛОГАМ =========
+# ========= 2. DIALOG ANALYSIS =========
 print("\n" + "="*80)
-print("АНАЛИЗ ПО ДИАЛОГАМ")
+print("DIALOG ANALYSIS")
 print("="*80)
 
 dialog_stats = []
@@ -68,28 +68,28 @@ for dialog_id in target_messages['B2'].unique():
 
 dialog_df = pd.DataFrame(dialog_stats)
 
-print(f"\nВсего уникальных диалогов: {len(dialog_df)}")
-print(f"Диалогов с хотя бы одним sentiment: {(dialog_df['messages_with_sentiment'] > 0).sum()}")
-print(f"Средний процент покрытия: {dialog_df['coverage_pct'].mean():.1f}%")
-print(f"Медианный процент покрытия: {dialog_df['coverage_pct'].median():.1f}%")
+print(f"\nTotal unique dialogs: {len(dialog_df)}")
+print(f"Dialogs with at least one sentiment: {(dialog_df['messages_with_sentiment'] > 0).sum()}")
+print(f"Average coverage percentage: {dialog_df['coverage_pct'].mean():.1f}%")
+print(f"Median coverage percentage: {dialog_df['coverage_pct'].median():.1f}%")
 
-# Распределение покрытия
+# Coverage distribution
 coverage_bins = [0, 25, 50, 75, 100]
 coverage_labels = ['0-25%', '25-50%', '50-75%', '75-100%']
 dialog_df['coverage_group'] = pd.cut(dialog_df['coverage_pct'], bins=coverage_bins, labels=coverage_labels)
-print(f"\nРаспределение диалогов по покрытию:")
+print(f"\nDialog coverage distribution:")
 for label in coverage_labels:
     count = (dialog_df['coverage_group'] == label).sum()
     if count > 0:
-        print(f"   {label}: {count} диалогов")
+        print(f"   {label}: {count} dialogs")
 
-# ========= 3. SENTIMENT ПО ПОЗИЦИИ В ДИАЛОГЕ =========
+# ========= 3. SENTIMENT BY POSITION IN DIALOG =========
 print("\n" + "="*80)
-print("SENTIMENT ПО ПОЗИЦИИ В ДИАЛОГЕ")
+print("SENTIMENT BY POSITION IN DIALOG")
 print("="*80)
 
 if len(sentiment_filled) > 0:
-    # Определяем позицию сообщения в диалоге
+    # Determine message position in dialog
     sentiment_filled = sentiment_filled.copy()
     sentiment_filled['turn_rank'] = sentiment_filled.groupby('B2')['Turn'].rank(method='first')
     sentiment_filled['position'] = pd.cut(
@@ -98,7 +98,7 @@ if len(sentiment_filled) > 0:
         labels=['First', 'Early (2-3)', 'Middle (4-6)', 'Late (7+)']
     )
     
-    print("\nРаспределение sentiment по позиции в диалоге:")
+    print("\nSentiment distribution by position in dialog:")
     for position in ['First', 'Early (2-3)', 'Middle (4-6)', 'Late (7+)']:
         pos_data = sentiment_filled[sentiment_filled['position'] == position]
         if len(pos_data) > 0:
@@ -108,9 +108,9 @@ if len(sentiment_filled) > 0:
                 pct = count / len(pos_data) * 100
                 print(f"      {sentiment:10s}: {count:4d} ({pct:5.2f}%)")
 
-# ========= 4. ВИЗУАЛИЗАЦИЯ =========
+# ========= 4. VISUALIZATION =========
 print("\n" + "="*80)
-print("СОЗДАНИЕ ВИЗУАЛИЗАЦИЙ")
+print("CREATING VISUALIZATIONS")
 print("="*80)
 
 if len(sentiment_filled) > 0:
@@ -198,16 +198,16 @@ if len(sentiment_filled) > 0:
     plt.tight_layout()
     output_file = "sentiment_analysis.png"
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
-    print(f"\nГрафик сохранен: {output_file}")
+    print(f"\nChart saved: {output_file}")
 else:
-    print("\n⚠️ Нет данных для визуализации!")
+    print("\n⚠️ No data for visualization!")
 
-# ========= 5. СОХРАНЕНИЕ РЕЗУЛЬТАТОВ =========
+# ========= 5. SAVING RESULTS =========
 print("\n" + "="*80)
-print("СОХРАНЕНИЕ РЕЗУЛЬТАТОВ")
+print("SAVING RESULTS")
 print("="*80)
 
-# Детальная статистика по sentiment
+# Detailed sentiment statistics
 if len(sentiment_filled) > 0:
     sentiment_details = []
     for sentiment in sentiment_counts.index:
@@ -222,11 +222,11 @@ if len(sentiment_filled) > 0:
     
     sentiment_details_df = pd.DataFrame(sentiment_details).sort_values('count', ascending=False)
     sentiment_details_df.to_csv('sentiment_details.csv', index=False)
-    print(f"Детали по sentiment сохранены: sentiment_details.csv")
+    print(f"Sentiment details saved: sentiment_details.csv")
 
-# Статистика по диалогам
+# Dialog statistics
 dialog_df.to_csv('sentiment_dialog_stats.csv', index=False)
-print(f"Статистика по диалогам сохранена: sentiment_dialog_stats.csv")
+print(f"Dialog statistics saved: sentiment_dialog_stats.csv")
 
 # Сводная статистика
 summary = {
@@ -252,7 +252,7 @@ summary = {
     ]
 }
 
-# Добавляем распределение по sentiment
+# Add sentiment distribution
 if len(sentiment_filled) > 0:
     for sentiment in sentiment_counts.index:
         summary['Metric'].append(f'{sentiment} count')
@@ -262,9 +262,9 @@ if len(sentiment_filled) > 0:
 
 summary_df = pd.DataFrame(summary)
 summary_df.to_csv('sentiment_summary.csv', index=False)
-print(f"Сводная статистика сохранена: sentiment_summary.csv")
+print(f"Summary statistics saved: sentiment_summary.csv")
 
 print("\n" + "="*80)
-print("АНАЛИЗ ЗАВЕРШЕН")
+print("ANALYSIS COMPLETED")
 print("="*80)
 
