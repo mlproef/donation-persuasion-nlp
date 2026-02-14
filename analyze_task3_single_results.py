@@ -10,18 +10,18 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'bsp2'))
 from strategies_hierarchical import STRATEGIES_INFO, STRATEGY_CATEGORIES
 
 print("="*80)
-print("ДЕТАЛЬНЫЙ АНАЛИЗ РЕЗУЛЬТАТОВ llama_task3_single.py")
+print("DETAILED ANALYSIS OF RESULTS FROM llama_task3_single.py")
 print("="*80)
 
-# Загружаем данные
-print("\n1. Загружаем данные...")
+# Load data
+print("\n1. Loading data...")
 df = pd.read_csv("test_batch_results_single.csv")
 
-print(f"   - Всего строк: {len(df):,}")
-print(f"   - Persuader сообщений (B4=0): {len(df[df['B4'] == 0]):,}")
-print(f"   - User сообщений (B4=1): {len(df[df['B4'] == 1]):,}")
+print(f"   - Total rows: {len(df):,}")
+print(f"   - Persuader messages (B4=0): {len(df[df['B4'] == 0]):,}")
+print(f"   - User messages (B4=1): {len(df[df['B4'] == 1]):,}")
 
-# Анализ стратегий
+# Analyze strategies
 persuader = df[df['B4'] == 0].copy()
 
 strategies_filled = persuader[
@@ -29,52 +29,52 @@ strategies_filled = persuader[
     (persuader['strategy_ollama_single'].astype(str).str.strip() != '')
 ]
 
-print(f"\n2. Статистика по стратегиям:")
-print(f"   - Всего persuader сообщений: {len(persuader):,}")
-print(f"   - Сообщений со стратегиями: {len(strategies_filled):,}")
-print(f"   - Процент проанализированных: {len(strategies_filled)/len(persuader)*100:.1f}%")
-print(f"   - Сообщений без стратегий: {len(persuader) - len(strategies_filled):,}")
+print(f"\n2. Strategy statistics:")
+print(f"   - Total persuader messages: {len(persuader):,}")
+print(f"   - Messages with strategies: {len(strategies_filled):,}")
+print(f"   - Analysis coverage: {len(strategies_filled)/len(persuader)*100:.1f}%")
+print(f"   - Messages without strategies: {len(persuader) - len(strategies_filled):,}")
 
-# Создаем маппинг стратегий к категориям
+# Create mapping from strategies to categories
 strategy_to_category = {}
 strategy_to_parent = {}
 for strategy in STRATEGIES_INFO:
     strategy_to_category[strategy['name']] = strategy.get('parent_category', 'Unknown')
     strategy_to_parent[strategy['name']] = strategy.get('parent_id', 'unknown')
 
-# Добавляем категории
+# Add categories
 strategies_filled = strategies_filled.copy()
 strategies_filled['category'] = strategies_filled['strategy_ollama_single'].map(strategy_to_category)
 strategies_filled['parent_id'] = strategies_filled['strategy_ollama_single'].map(strategy_to_parent)
 
-# ========= 1. РАСПРЕДЕЛЕНИЕ ПО СТРАТЕГИЯМ =========
+# ========= 1. STRATEGY DISTRIBUTION =========
 print("\n" + "="*80)
-print("РАСПРЕДЕЛЕНИЕ ПО СТРАТЕГИЯМ")
+print("STRATEGY DISTRIBUTION")
 print("="*80)
 
 strategy_counts = strategies_filled['strategy_ollama_single'].value_counts()
-print(f"\nВсего уникальных стратегий: {len(strategy_counts)}")
-print(f"\nВсе стратегии (отсортированные по частоте):")
+print(f"\nTotal unique strategies: {len(strategy_counts)}")
+print(f"\nAll strategies (sorted by frequency):")
 
 for i, (strategy, count) in enumerate(strategy_counts.items(), 1):
     pct = count / len(strategies_filled) * 100
     category = strategy_to_category.get(strategy, 'Unknown')
     print(f"   {i:2d}. {strategy:50s} | {category:30s} | {count:4d} ({pct:5.2f}%)")
 
-# ========= 2. РАСПРЕДЕЛЕНИЕ ПО КАТЕГОРИЯМ =========
+# ========= 2. CATEGORY DISTRIBUTION =========
 print("\n" + "="*80)
-print("РАСПРЕДЕЛЕНИЕ ПО КАТЕГОРИЯМ")
+print("CATEGORY DISTRIBUTION")
 print("="*80)
 
 category_counts = strategies_filled['category'].value_counts()
-print(f"\nВсего категорий: {len(category_counts)}")
+print(f"\nTotal categories: {len(category_counts)}")
 for cat, count in category_counts.items():
     pct = count / len(strategies_filled) * 100
     print(f"   {cat:40s}: {count:4d} ({pct:5.2f}%)")
 
-# ========= 3. АНАЛИЗ ПО ДИАЛОГАМ =========
+# ========= 3. DIALOG ANALYSIS =========
 print("\n" + "="*80)
-print("АНАЛИЗ ПО ДИАЛОГАМ")
+print("DIALOG ANALYSIS")
 print("="*80)
 
 dialog_stats = []
@@ -92,12 +92,12 @@ for dialog_id in persuader['B2'].unique():
 
 dialog_df = pd.DataFrame(dialog_stats)
 
-print(f"\nВсего диалогов: {len(dialog_df)}")
-print(f"Диалогов с хотя бы одной стратегией: {(dialog_df['messages_with_strategy'] > 0).sum()}")
-print(f"Средний процент покрытия: {dialog_df['coverage_pct'].mean():.1f}%")
-print(f"Среднее количество уникальных стратегий на диалог: {dialog_df['unique_strategies'].mean():.2f}")
+print(f"\nTotal dialogs: {len(dialog_df)}")
+print(f"Dialogs with at least one strategy: {(dialog_df['messages_with_strategy'] > 0).sum()}")
+print(f"Average coverage percentage: {dialog_df['coverage_pct'].mean():.1f}%")
+print(f"Average number of unique strategies per dialog: {dialog_df['unique_strategies'].mean():.2f}")
 
-# ========= 4. СТРАТЕГИИ ПО ПОЗИЦИИ В ДИАЛОГЕ =========
+# ========= 4. STRATEGIES BY POSITION IN DIALOG =========
 print("\n" + "="*80)
 print("СТРАТЕГИИ ПО ПОЗИЦИИ В ДИАЛОГЕ")
 print("="*80)

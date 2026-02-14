@@ -5,24 +5,24 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 print("="*80)
-print("АНАЛИЗ РЕЗУЛЬТАТОВ test_batch_interest_results.csv")
+print("ANALYZING RESULTS FROM test_batch_interest_results.csv")
 print("="*80)
 
-# Загружаем данные
-print("\n1. Загружаем данные...")
+# Load data
+print("\n1. Loading data...")
 df = pd.read_csv("test_batch_interest_results.csv")
 
-# Конвертируем пустые строки в NaN для правильной проверки
+# Convert empty strings to NaN for proper checking
 if "interest_ollama_v2" in df.columns:
     df["interest_ollama_v2"] = df["interest_ollama_v2"].replace("", pd.NA)
     df["interest_ollama_v2"] = df["interest_ollama_v2"].replace("nan", pd.NA)
     df["interest_ollama_v2"] = df["interest_ollama_v2"].replace("None", pd.NA)
 
-print(f"   - Всего строк: {len(df):,}")
-print(f"   - Target сообщений (B4=1): {len(df[df['B4'] == 1]):,}")
-print(f"   - Persuader сообщений (B4=0): {len(df[df['B4'] == 0]):,}")
+print(f"   - Total rows: {len(df):,}")
+print(f"   - Target messages (B4=1): {len(df[df['B4'] == 1]):,}")
+print(f"   - Persuader messages (B4=0): {len(df[df['B4'] == 0]):,}")
 
-# Анализ interest v2
+# Analyze interest v2
 target_messages = df[df['B4'] == 1].copy()
 
 interest_filled = target_messages[
@@ -30,69 +30,69 @@ interest_filled = target_messages[
     (target_messages['interest_ollama_v2'].astype(str).str.strip() != '')
 ]
 
-print(f"\n2. Статистика по interest (v2):")
-print(f"   - Всего target сообщений: {len(target_messages):,}")
-print(f"   - Сообщений с interest: {len(interest_filled):,}")
+print(f"\n2. Interest statistics (v2):")
+print(f"   - Total target messages: {len(target_messages):,}")
+print(f"   - Messages with interest: {len(interest_filled):,}")
 if len(target_messages) > 0:
-    print(f"   - Процент проанализированных: {len(interest_filled)/len(target_messages)*100:.1f}%")
-print(f"   - Сообщений без interest: {len(target_messages) - len(interest_filled):,}")
+    print(f"   - Analysis coverage: {len(interest_filled)/len(target_messages)*100:.1f}%")
+print(f"   - Messages without interest: {len(target_messages) - len(interest_filled):,}")
 
 if len(interest_filled) == 0:
-    print("\n⚠️ Нет данных в interest_ollama_v2 для анализа!")
-    print("   Запустите анализ сначала: python3 bsp2/test_batch_interest.py")
+    print("\n⚠️ No data in interest_ollama_v2 for analysis!")
+    print("   Run analysis first: python3 bsp2/test_batch_interest.py")
     exit(0)
 
-# ========= 1. РАСПРЕДЕЛЕНИЕ ПО INTEREST =========
+# ========= 1. INTEREST DISTRIBUTION =========
 print("\n" + "="*80)
-print("РАСПРЕДЕЛЕНИЕ ПО INTEREST (v2)")
+print("INTEREST DISTRIBUTION (v2)")
 print("="*80)
 
 interest_counts = interest_filled['interest_ollama_v2'].value_counts()
-print(f"\nВсего уникальных interest: {len(interest_counts)}")
-print(f"\nРаспределение:")
+print(f"\nTotal unique interests: {len(interest_counts)}")
+print(f"\nDistribution:")
 
 total = len(interest_filled)
 for interest, count in interest_counts.items():
     pct = count / total * 100
     print(f"   {interest:20s}: {count:5d} ({pct:5.2f}%)")
 
-# Сохраняем детальную статистику
+# Save detailed statistics
 interest_details = pd.DataFrame({
     'interest': interest_counts.index,
     'count': interest_counts.values,
     'percentage': (interest_counts.values / total * 100).round(2)
 })
 interest_details.to_csv("interest_v2_details.csv", index=False)
-print(f"\n✅ Детальная статистика сохранена в: interest_v2_details.csv")
+print(f"\n✅ Detailed statistics saved to: interest_v2_details.csv")
 
-# ========= 2. РАСПРЕДЕЛЕНИЕ ПО LABELS =========
+# ========= 2. LABEL DISTRIBUTION =========
 print("\n" + "="*80)
-print("РАСПРЕДЕЛЕНИЕ ПО LABELS (v2)")
+print("LABEL DISTRIBUTION (v2)")
 print("="*80)
 
 if "interest_label_ollama_v2" in interest_filled.columns:
-    # Конвертируем labels в числовой формат
+    # Convert labels to numeric format
     interest_filled_labels = interest_filled.copy()
     interest_filled_labels['interest_label_ollama_v2'] = interest_filled_labels['interest_label_ollama_v2'].replace("", pd.NA)
     interest_filled_labels = interest_filled_labels[interest_filled_labels['interest_label_ollama_v2'].notna()]
     
-    # Конвертируем в числовой формат
+    # Convert to numeric format
     interest_filled_labels['label_num'] = pd.to_numeric(interest_filled_labels['interest_label_ollama_v2'], errors='coerce')
     interest_filled_labels = interest_filled_labels[interest_filled_labels['label_num'].notna()]
     
     label_counts = interest_filled_labels['label_num'].value_counts().sort_index()
     label_names = {0: "Not Interested", 1: "Neutral", 2: "Interested"}
     
-    print(f"\nРаспределение по labels:")
+    print(f"\nLabel distribution:")
     for label, count in label_counts.items():
         label_int = int(label)
         label_name = label_names.get(label_int, f"Unknown ({label_int})")
         pct = count / len(interest_filled_labels) * 100
         print(f"   {label_int} ({label_name:20s}): {count:5d} ({pct:5.2f}%)")
 
-# ========= 3. АНАЛИЗ ПО ДИАЛОГАМ =========
+# ========= 3. DIALOG ANALYSIS =========
 print("\n" + "="*80)
-print("АНАЛИЗ ПО ДИАЛОГАМ")
+print("DIALOG ANALYSIS")
 print("="*80)
 
 dialog_stats = []
