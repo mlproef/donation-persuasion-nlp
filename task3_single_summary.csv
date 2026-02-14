@@ -1,0 +1,11 @@
+Metric,Value
+Total persuader messages,10600
+Messages with strategy,10352
+Coverage percentage,97.7%
+Messages without strategy,248
+Unique strategies found,45
+Total categories,12
+Total dialogs,1017
+Dialogs with at least one strategy,1017
+Average coverage per dialog,97.7%
+Average unique strategies per dialog,7.52

@@ -1,0 +1,46 @@
+strategy,category,count,percentage,dialogs_with_strategy,avg_per_dialog
+Greeting / Rapport,Conversation Management,1055,10.191267387944357,685,1.5401459854014599
+Acknowledgement,Conversation Management,1017,9.8241885625966,644,1.579192546583851
+Rational Appeal,Rational / Impact Appeal,879,8.491112828438949,527,1.6679316888045541
+Charity Awareness Probe,Conversation Management,791,7.641035548686244,612,1.292483660130719
+Framing,Framing & Presentation,730,7.051777434312211,522,1.3984674329501916
+Credibility Appeal,Authority / Expertise,674,6.5108191653786704,443,1.5214446952595937
+Non-persuasive Other,Conversation Management,599,5.786321483771252,405,1.4790123456790123
+Call to Action,Call to Action,573,5.53516228748068,462,1.2402597402597402
+Appeal to Values,Norms / Morality / Values,536,5.17774343122102,404,1.3267326732673268
+Moral Appeal,Norms / Morality / Values,520,5.023183925811438,389,1.3367609254498716
+Logistics / Coordination,Conversation Management,346,3.3423493044822257,268,1.291044776119403
+Donation Baseline / Habit Probe,Conversation Management,324,3.12982998454405,262,1.2366412213740459
+Conversation Closing,Conversation Management,297,2.8690108191653785,253,1.173913043478261
+Empathy Appeal,Emotional Influence,264,2.5502318392581143,221,1.1945701357466063
+Commitment and Consistency,Commitment / Consistency,226,2.1831530139103554,194,1.1649484536082475
+Social Proof,Social Influence,182,1.7581143740340028,161,1.1304347826086956
+Storytelling,Emotional Influence,177,1.7098145285935087,149,1.1879194630872483
+Qualification / Segmentation,Conversation Management,136,1.313755795981453,113,1.2035398230088497
+Guilt Induction,Norms / Morality / Values,128,1.2364760432766615,103,1.2427184466019416
+Self-feeling Appeal,Norms / Morality / Values,125,1.2074961360123648,106,1.179245283018868
+Reciprocity,Exchange / Incentives,88,0.8500772797527048,72,1.2222222222222223
+Activation of Personal Commitment,Commitment / Consistency,86,0.830757341576507,82,1.048780487804878
+Emotional Appeal,Emotional Influence,73,0.705177743431221,71,1.028169014084507
+Fear Appeal,Emotional Influence,72,0.6955177743431221,68,1.0588235294117647
+Permission / Time Check,Conversation Management,69,0.6665378670788253,67,1.0298507462686568
+Rewarding Activity,Exchange / Incentives,65,0.6278979907264297,58,1.1206896551724137
+Pre-giving,Exchange / Incentives,55,0.5312982998454405,51,1.0784313725490196
+Unity,Social Influence,50,0.4829984544049459,47,1.0638297872340425
+Foot-in-the-door,Commitment / Consistency,45,0.4346986089644513,43,1.0465116279069768
+Logical Appeal,Rational / Impact Appeal,41,0.39605873261205565,38,1.0789473684210527
+Sympathy Appeal,Emotional Influence,39,0.3767387944358578,38,1.0263157894736843
+Loss Aversion Appeal,Framing & Presentation,17,0.16421947449768162,16,1.0625
+Door-in-the-face,Commitment / Consistency,16,0.1545595054095827,15,1.0666666666666667
+Urgency,Urgency / Scarcity,15,0.14489953632148378,15,1.0
+Expertise,Authority / Expertise,7,0.06761978361669242,6,1.1666666666666667
+Authority,Authority / Expertise,7,0.06761978361669242,6,1.1666666666666667
+Liking,Call to Action,7,0.06761978361669242,7,1.0
+Threat,Threat / Pressure,5,0.04829984544049459,5,1.0
+Debt,Exchange / Incentives,4,0.03863987635239567,3,1.3333333333333333
+Emotional Manipulation,Emotional Influence,3,0.028979907264296754,3,1.0
+Social Positioning,Social Influence,3,0.028979907264296754,3,1.0
+Scarcity,Urgency / Scarcity,2,0.019319938176197836,2,1.0
+Aversive Stimulation,Threat / Pressure,2,0.019319938176197836,2,1.0
+Bait-and-switch,Framing & Presentation,1,0.009659969088098918,1,1.0
+Pretexting,Framing & Presentation,1,0.009659969088098918,1,1.0

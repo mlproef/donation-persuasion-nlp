@@ -1,0 +1,15 @@
+Metric,Value
+Total target messages,10332
+Messages with sentiment,10332
+Coverage percentage,100.0%
+Messages without sentiment,0
+Unique sentiments found,3
+Total dialogs,1017
+Dialogs with at least one sentiment,1017
+Average coverage per dialog,100.0%
+neutral count,4810
+neutral percentage,46.55%
+positive count,4610
+positive percentage,44.62%
+negative count,912
+negative percentage,8.83%
