@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import STRATEGY_RESULTS, figure, result  # noqa: E402
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -6,7 +11,7 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'bsp2'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'classification'))
 from strategies_hierarchical import STRATEGIES_INFO, STRATEGY_CATEGORIES
 
 print("="*80)
@@ -15,7 +20,7 @@ print("="*80)
 
 # Load data
 print("\n1. Loading data...")
-df = pd.read_csv("test_batch_results_single.csv")
+df = pd.read_csv(str(STRATEGY_RESULTS))
 
 print(f"   - Total rows: {len(df):,}")
 print(f"   - Persuader messages (B4=0): {len(df[df['B4'] == 0]):,}")
@@ -200,7 +205,7 @@ for idx, val in unique_strategies_counts.items():
     ax6.text(idx, val, f' {val}', va='bottom', fontsize=8)
 
 plt.tight_layout()
-output_file = "task3_single_analysis.png"
+output_file = str(figure("task3_single_analysis.png"))
 plt.savefig(output_file, dpi=300, bbox_inches='tight')
 print(f"\nГрафик сохранен: {output_file}")
 
@@ -223,7 +228,7 @@ for strategy in strategy_counts.index:
     })
 
 strategy_details_df = pd.DataFrame(strategy_details).sort_values('count', ascending=False)
-strategy_details_df.to_csv('task3_single_strategy_details.csv', index=False)
+strategy_details_df.to_csv(str(result("task3_single_strategy_details.csv")), index=False)
 print(f"Детали по стратегиям сохранены: task3_single_strategy_details.csv")
 
 # Статистика по категориям
@@ -239,11 +244,11 @@ for category in category_counts.index:
     })
 
 category_details_df = pd.DataFrame(category_details).sort_values('count', ascending=False)
-category_details_df.to_csv('task3_single_category_details.csv', index=False)
+category_details_df.to_csv(str(result("task3_single_category_details.csv")), index=False)
 print(f"Детали по категориям сохранены: task3_single_category_details.csv")
 
 # Статистика по диалогам
-dialog_df.to_csv('task3_single_dialog_stats.csv', index=False)
+dialog_df.to_csv(str(result("task3_single_dialog_stats.csv")), index=False)
 print(f"Статистика по диалогам сохранена: task3_single_dialog_stats.csv")
 
 # Сводная статистика
@@ -275,7 +280,7 @@ summary = {
 }
 
 summary_df = pd.DataFrame(summary)
-summary_df.to_csv('task3_single_summary.csv', index=False)
+summary_df.to_csv(str(result("task3_single_summary.csv")), index=False)
 print(f"Сводная статистика сохранена: task3_single_summary.csv")
 
 print("\n" + "="*80)

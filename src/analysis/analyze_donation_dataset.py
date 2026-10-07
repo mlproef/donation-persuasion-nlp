@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import FULL_INFO, figure, result  # noqa: E402
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -10,7 +15,7 @@ print("="*80)
 
 # Load data
 print("\n1. Loading data...")
-info_df = pd.read_csv("full_info.csv")
+info_df = pd.read_csv(str(FULL_INFO))
 
 print(f"   - Loaded {len(info_df)} rows from full_info.csv")
 print(f"   - Columns: {list(info_df.columns)}")
@@ -86,7 +91,7 @@ if len(donation_amounts) > 0:
     print(f"   Total amount donated: ${donation_amounts.sum():.2f}")
 
 # Save statistics
-dialog_stats.to_csv('donation_dataset_stats.csv', index=False)
+dialog_stats.to_csv(str(result("donation_dataset_stats.csv")), index=False)
 print(f"\n✅ Dialog statistics saved to: donation_dataset_stats.csv")
 
 # ========= 3. VISUALIZATION =========
@@ -107,7 +112,7 @@ ax1.text(0, -1.3, f'Total: {total_people:,} people', ha='center', fontsize=11,
          bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
 
 plt.tight_layout()
-plt.savefig("donation_overall_rate.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("donation_overall_rate.png")), dpi=300, bbox_inches='tight')
 print(f"✅ Graph 1 saved: donation_overall_rate.png")
 plt.close(fig1)
 
@@ -141,7 +146,7 @@ for i, (bar, rate, total, donated) in enumerate(zip(bars, role_rates, role_total
              ha='center', va='bottom', fontsize=11, fontweight='bold')
 
 plt.tight_layout()
-plt.savefig("donation_by_role.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("donation_by_role.png")), dpi=300, bbox_inches='tight')
 print(f"✅ Graph 2 saved: donation_by_role.png")
 plt.close(fig2)
 
@@ -161,7 +166,7 @@ ax3.text(0, -1.3, f'Total: {total_dialogs:,} dialogs', ha='center', fontsize=11,
          bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
 
 plt.tight_layout()
-plt.savefig("donation_dialog_rate.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("donation_dialog_rate.png")), dpi=300, bbox_inches='tight')
 print(f"✅ Graph 3 saved: donation_dialog_rate.png")
 plt.close(fig3)
 
@@ -180,7 +185,7 @@ if len(donation_amounts) > 0:
     ax4.grid(axis='y', alpha=0.3)
     
     plt.tight_layout()
-    plt.savefig("donation_amount_distribution.png", dpi=300, bbox_inches='tight')
+    plt.savefig(str(figure("donation_amount_distribution.png")), dpi=300, bbox_inches='tight')
     print(f"✅ Graph 4 saved: donation_amount_distribution.png")
     plt.close(fig4)
 

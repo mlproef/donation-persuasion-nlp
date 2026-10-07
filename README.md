@@ -1,156 +1,183 @@
-# BSP2: Persuasion Dialogue Analysis
+# What makes people donate? Persuasion strategies in charity dialogs
 
-Project for analyzing persuasion dialogues where one participant (persuader) attempts to convince another (target) to make a donation.
+NLP analysis of **1,017 real persuasion conversations** from the
+[PersuasionForGood](https://aclanthology.org/P19-1566/) corpus, where one person
+tries to convince another to donate to a children's charity.
+Using local LLMs, I labelled **~21,000 messages** with persuasion strategies,
+sentiment and interest in donating, then measured which strategies and reactions
+go together with an actual donation.
 
-## 📋 Project Description
+![Donation rate by persuadee reaction](figures/key_findings.png)
 
-The project solves three main tasks:
+**Python · pandas · matplotlib · LLMs via Ollama (gpt-oss 20B, Qwen3 30B) · prompt engineering · Hugging Face Transformers (earlier iterations)**
 
-1. **Task 1: Sentiment Analysis**
-   - Determining the overall emotional tone of communication in the dialogue
-   - Classification: negative, neutral, positive
-   - Uses `cardiffnlp/twitter-roberta-base-sentiment` model
+## Key findings
 
-2. **Task 2: Interest in Donation Classification**
-   - Classifying target reactions: refusal/neutral/interested
-   - Uses LLM (Ollama) for classification with full dialog context
-   - Three categories: Not Interested (0), Neutral (1), Interested (2)
+* **Interest is the strongest signal.** Dialogs where the persuadee ever showed
+  interest ended in a donation **75%** of the time, versus **36%** when they never
+  got past neutral.
+* **Tone matters.** Mostly positive conversations led to donations in **78%** of
+  cases, mostly negative ones in **40%**.
+* **A refusal is not the end.** Even after the persuadee said no at least once,
+  **58%** of dialogs still ended in a donation (78% without a refusal).
+* **Cooperative strategies beat pressure.** Messages using *Reciprocity* or
+  *Commitment & Consistency* were followed by a positive reply about 60% of the
+  time and sat in dialogs with a 74-81% donation rate. *Guilt Induction* and
+  *Fear Appeal* drew a negative reply about a third of the time, and dialogs using
+  them donated at only 49-60%.
 
-3. **Task 3: Persuasion Strategy Classification**
-   - Identifying persuasion strategies used by the persuader
-   - 42 strategies organized into 11 hierarchical categories
-   - Uses hierarchical classification via LLM (Ollama)
+![Joint effect of four strategies](figures/joint_strategies_effect.png)
 
-## 🎯 Main Results
+All numbers are correlations over LLM-generated labels. See
+[Limitations](#limitations).
 
-### Final Data
-- `full_dialog_with_all_analysis.csv` - complete dialog with all analyses (sentiment, interest, strategies)
+## Approach
 
-### Sentiment Analysis
-- `sentiment_v2_summary.csv` - sentiment summary statistics
-- `sentiment_v2_dialog_stats.csv` - dialog statistics
-- `sentiment_v2_details.csv` - detailed information
-- `sentiment_v2_analysis.png` - analysis visualization
-- `sentiment_donation_correlation.png` - correlation between sentiment and donations
-
-### Interest Analysis
-- `interest_v2_summary.csv` - interest summary statistics
-- `interest_v2_dialog_stats.csv` - dialog statistics
-- `interest_v2_details.csv` - detailed information
-- `interest_v2_analysis.png` - analysis visualization
-- `interest_donation_correlation.png` - correlation between interest and donations
-- `interest_donation_summary.csv` - donation correlation summary
-
-### Strategy Analysis
-- `task3_single_summary.csv` - strategy summary statistics
-- `task3_single_dialog_stats.csv` - dialog statistics
-- `task3_single_category_details.csv` - category details
-- `task3_single_strategy_details.csv` - strategy details
-- `task3_single_analysis.png` - analysis visualization
-- `strategy_donation_stats.csv` - correlation between strategies and donations
-- `strategy_interest_stats.csv` - correlation between strategies and interest
-- `strategy_sentiment_stats.csv` - correlation between strategies and sentiment
-
-### Donation Analysis
-- `donation_dataset_stats.csv` - donation statistics
-- `donation_analysis.png` - donation analysis visualization
-- `donation_by_role.png` - donations by role
-- `donation_amount_distribution.png` - donation amount distribution
-
-### Joint Analysis
-- `joint_strategies_stats.csv` - joint strategy effect statistics
-- `joint_strategies_effect.png` - joint effect visualization
-
-## 📁 Project Structure
-
-```
-bsp2/
-├── README.md                          # This file
-├── PROJECT_DOCUMENTATION.md            # Detailed project documentation
-├── TASK1_SENTIMENT.md                  # Task 1 documentation
-├── TASK2_INTEREST_IN_DONATION.md      # Task 2 documentation
-├── TASK3_STRATEGIES.md                 # Task 3 documentation
-├── strategies_sources.md               # Strategy sources
-├── STRATEGIES_IMPROVEMENTS.md          # Strategy improvements
-│
-├── bsp2/                              # Main scripts
-│   ├── llama_sentiment.py             # LLM sentiment classification
-│   ├── llama_interest.py              # LLM interest classification
-│   ├── llama_strategies.py            # LLM strategy classification
-│   └── strategies_hierarchical.py     # Hierarchical strategy structure
-│
-├── analyze_*.py                        # Result analysis scripts
-├── merge_all_analysis_results.py      # Merge all analyses
-│
-└── *.csv, *.png                       # Analysis results
+```mermaid
+flowchart LR
+    A[PersuasionForGood<br/>1,017 dialogs] --> B[Persuader messages<br/>10,600]
+    A --> C[Persuadee messages<br/>10,332]
+    B --> D["Task 3: strategy<br/>49 strategies / 12 categories"]
+    C --> E["Task 1: sentiment<br/>neg / neutral / pos"]
+    C --> F["Task 2: interest<br/>not interested / neutral / interested"]
+    D --> G[Merged dataset]
+    E --> G
+    F --> G
+    A -- donations --> H[Correlation analysis<br/>+ figures]
+    G --> H
 ```
 
-## 🚀 Quick Start
+| Task | Question | How |
+|---|---|---|
+| **1. Sentiment** | Is the persuadee's tone negative, neutral or positive? | LLM labels every persuadee message, one request per dialog so it sees the whole conversation |
+| **2. Interest** | Is the persuadee refusing, undecided or interested in donating? | Same batching; context is essential here (*"maybe later"* means different things in different dialogs) |
+| **3. Strategy** | Which persuasion technique does each persuader message use? | Two-step prompt: pick 1 of 12 categories, then 1 of the strategies inside it. Custom taxonomy of 49 strategies with definitions, marker phrases and disambiguation rules |
 
-### Installing Dependencies
+The LLM pipeline is the fourth iteration. Before it I tried zero-shot NLI
+(BART / RoBERTa-MNLI), a classifier on NLI features trained on 500 hand-labelled
+messages, and a fine-tuned RoBERTa with dialog context, which struggled with the
+rare *refusal* class. Details in [docs/methodology.md](docs/methodology.md).
+
+## Results in numbers
+
+| | |
+|---|---|
+| Dialogs / messages analysed | 1,017 / 20,932 |
+| Dialogs ending in a donation | 711 (69.9%) |
+| Persuader messages that received a strategy | 97.7% |
+| Distinct strategies observed | 45 of 49 |
+| Average distinct strategies per dialog | 7.5 |
+| Persuadee messages: neutral / positive / negative | 47% / 44% / 9% |
+| Persuadee messages: neutral / interested / not interested | 63% / 27% / 10% |
+
+<details>
+<summary><b>Donation rate per strategy</b> (persuasive strategies used at least 50 times)</summary>
+
+Greetings, acknowledgements and other conversation-management moves are left out.
+
+| Strategy | Category | Times used | Dialog ended in donation |
+|---|---|---:|---:|
+| Reciprocity | Exchange / Incentives | 88 | 80.7% |
+| Unity | Social Influence | 50 | 80.0% |
+| Activation of Personal Commitment | Commitment / Consistency | 86 | 79.1% |
+| Pre-giving | Exchange / Incentives | 55 | 76.4% |
+| Commitment and Consistency | Commitment / Consistency | 226 | 74.3% |
+| Storytelling | Emotional Influence | 177 | 73.4% |
+| Appeal to Values | Norms / Morality / Values | 536 | 72.2% |
+| Empathy Appeal | Emotional Influence | 264 | 71.2% |
+| Social Proof | Social Influence | 182 | 70.3% |
+| Rational Appeal | Rational / Impact Appeal | 879 | 70.0% |
+| Framing | Framing & Presentation | 730 | 66.8% |
+| Self-feeling Appeal | Norms / Morality / Values | 125 | 66.4% |
+| Moral Appeal | Norms / Morality / Values | 520 | 66.2% |
+| Credibility Appeal | Authority / Expertise | 674 | 66.0% |
+| Call to Action | Call to Action | 573 | 66.0% |
+| Emotional Appeal | Emotional Influence | 73 | 65.8% |
+| Fear Appeal | Emotional Influence | 72 | 59.7% |
+| Rewarding Activity | Exchange / Incentives | 65 | 52.3% |
+| Guilt Induction | Norms / Morality / Values | 128 | 49.2% |
+
+Full table: [`results/strategy_donation_stats.csv`](results/strategy_donation_stats.csv)
+</details>
+
+More plots are in [`figures/`](figures/), for example
+[strategy distribution](figures/task3_single_analysis.png),
+[strategy × donation heatmap](figures/strategy_donation_heatmap.png) and
+[interest over the course of a dialog](figures/interest_v2_analysis.png).
+
+## Repository structure
+
+```
+├── src/
+│   ├── classification/        # LLM labelling (needs an Ollama server)
+│   │   ├── llama_sentiment.py         Task 1
+│   │   ├── llama_interest.py          Task 2
+│   │   ├── llama_strategies.py        Task 3
+│   │   └── strategies_hierarchical.py strategy taxonomy (49 strategies, 12 categories)
+│   ├── analysis/              # statistics and plots from the labels
+│   └── paths.py               # all file locations in one place
+├── data/
+│   ├── processed/full_dialog_with_all_analysis.csv   every message with all labels
+│   └── README.md              # data source, columns, how to get the raw corpus
+├── results/                   # summary tables (CSV)
+├── figures/                   # plots (PNG)
+├── docs/
+│   ├── methodology.md         # how labels were produced, iterations, limitations
+│   ├── strategies_sources.md  # literature behind the strategy taxonomy
+│   └── dev-notes/             # original working notes (in Russian)
+└── archive/early_runs/        # outputs of earlier runs, kept for reference
+```
+
+## Running it
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+git clone https://github.com/mlproef/donation-persuasion-nlp.git
+cd donation-persuasion-nlp
+python -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Usage
+**Explore the results** without running anything: open
+`data/processed/full_dialog_with_all_analysis.csv` or the files in `results/`.
 
-1. **Running Analysis:**
-   - Use scripts in `bsp2/` directory for classification
-   - Use `analyze_*.py` scripts for result analysis
+**Re-run the analysis:** download `full_dialog.csv` and `full_info.csv` into
+`data/raw/` (see [data/README.md](data/README.md)), then:
 
-2. **Merging Results:**
-   ```bash
-   python merge_all_analysis_results.py
-   ```
+```bash
+# 1. Label the messages (slow; needs Ollama with the models pulled)
+export OLLAMA_URL=http://localhost:11434/api/chat
+python src/classification/llama_sentiment.py
+python src/classification/llama_interest.py
+python src/classification/llama_strategies.py
 
-## 📊 Methods and Models
+# 2. Merge, compute statistics, draw figures
+python src/analysis/merge_all_analysis_results.py
+python src/analysis/analyze_donation_dataset.py
+python src/analysis/analyze_interest_donation_correlation.py
+python src/analysis/analyze_strategy_donation_correlation.py
+python src/analysis/analyze_joint_strategies_effect.py
+python src/analysis/make_key_findings_figure.py
+```
 
-### Sentiment Analysis
-- **Model:** `cardiffnlp/twitter-roberta-base-sentiment`
-- **Method:** Pre-trained model for sentiment analysis
+Each script can be run from any directory; paths resolve through `src/paths.py`.
 
-### Interest Classification
-- **Model:** LLM via Ollama API (qwen3:30b)
-- **Method:** Batch processing of dialogs with full context
+## Limitations
 
-### Strategy Classification
-- **Model:** LLM via Ollama API (qwen3:30b)
-- **Method:** Hierarchical classification (category first, then strategy)
-- **Structure:** 11 categories, 42 strategies
+* **LLM labels are not yet validated against human annotation.** Measuring
+  agreement on the 500 hand-labelled messages from an earlier iteration is the
+  next step.
+* **Correlation, not causation.** Persuaders adapt their strategy to how the
+  conversation is going, so a strategy seen in successful dialogs did not
+  necessarily cause the donation.
+* **Rare strategies.** Several strategies occur fewer than 20 times; their
+  rates are not reliable.
+* **Donation outcome** counts a dialog as successful if either participant
+  donated, which includes the persuader's own donation.
 
-## 📈 Results
+## Data and credits
 
-All analysis results are saved in CSV files and visualized in PNG files. Main metrics:
+Dialogs and donation amounts: PersuasionForGood corpus by Wang et al., *Persuasion
+for Good: Towards a Personalized Persuasive Dialogue System for Social Good*,
+ACL 2019, released under the Apache License 2.0.
 
-- **Sentiment:** Sentiment distribution across dialogs
-- **Interest:** Correlation between interest and donations
-- **Strategies:** Effectiveness of various persuasion strategies
-- **Donations:** Statistics and distribution of donations
-
-## 📚 Documentation
-
-Detailed documentation is available in:
-- `PROJECT_DOCUMENTATION.md` - full project documentation
-- `TASK1_SENTIMENT.md` - Task 1 details
-- `TASK2_INTEREST_IN_DONATION.md` - Task 2 details
-- `TASK3_STRATEGIES.md` - Task 3 details
-
-## 🔧 Requirements
-
-- Python 3.9+
-- PyTorch
-- Transformers
-- Pandas, NumPy
-- Matplotlib, Seaborn
-- Ollama (for LLM classification)
-
-## 📝 License
-
-Project created for educational purposes.
-
-## 👤 Author
-
-BSP2 Project - Persuasion Dialogue Analysis
+Built as a Bachelor Semester Project by [@mlproef](https://github.com/mlproef).

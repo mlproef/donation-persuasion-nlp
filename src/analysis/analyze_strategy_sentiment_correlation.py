@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import SENTIMENT_RESULTS, STRATEGY_RESULTS, figure, result  # noqa: E402
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -10,8 +15,8 @@ print("="*80)
 
 # Загружаем данные
 print("\n1. Загружаем данные...")
-strategies_df = pd.read_csv("test_batch_results_single.csv")
-sentiment_df = pd.read_csv("test_batch_sentiment_results.csv")
+strategies_df = pd.read_csv(str(STRATEGY_RESULTS))
+sentiment_df = pd.read_csv(str(SENTIMENT_RESULTS))
 
 # Очищаем данные
 strategies_df["strategy_ollama_single"] = strategies_df["strategy_ollama_single"].replace("", pd.NA)
@@ -104,7 +109,7 @@ for strategy in pairs_df['strategy'].unique():
     strategy_stats.append(stats)
 
 strategy_stats_df = pd.DataFrame(strategy_stats).sort_values('total_pairs', ascending=False)
-strategy_stats_df.to_csv('strategy_sentiment_stats.csv', index=False)
+strategy_stats_df.to_csv(str(result("strategy_sentiment_stats.csv")), index=False)
 print(f"\n✅ Статистика сохранена в: strategy_sentiment_stats.csv")
 
 # Топ-10 стратегий с наибольшим процентом негативных сентиментов
@@ -144,7 +149,7 @@ for i, (idx, row) in enumerate(top_negative_plot.iterrows()):
     ax1.text(row['negative_pct'], i, f" {row['negative_pct']:.1f}% (n={int(row['total_pairs'])})", 
              va='center', fontsize=9)
 plt.tight_layout()
-plt.savefig("strategies_leading_to_negative_sentiment.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("strategies_leading_to_negative_sentiment.png")), dpi=300, bbox_inches='tight')
 print(f"✅ График 1 сохранен: strategies_leading_to_negative_sentiment.png")
 plt.close(fig1)
 
@@ -163,7 +168,7 @@ for i, (idx, row) in enumerate(top_positive_plot.iterrows()):
     ax2.text(row['positive_pct'], i, f" {row['positive_pct']:.1f}% (n={int(row['total_pairs'])})", 
              va='center', fontsize=9)
 plt.tight_layout()
-plt.savefig("strategies_leading_to_positive_sentiment.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("strategies_leading_to_positive_sentiment.png")), dpi=300, bbox_inches='tight')
 print(f"✅ График 2 сохранен: strategies_leading_to_positive_sentiment.png")
 plt.close(fig2)
 
@@ -193,7 +198,7 @@ ax3.set_title('Strategy × Sentiment Correlation Matrix (Top-20 Strategies)', fo
 ax3.set_xlabel('Sentiment', fontsize=12, fontweight='bold')
 ax3.set_ylabel('Strategy', fontsize=12, fontweight='bold')
 plt.tight_layout()
-plt.savefig("strategy_sentiment_heatmap.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("strategy_sentiment_heatmap.png")), dpi=300, bbox_inches='tight')
 print(f"✅ График 3 сохранен: strategy_sentiment_heatmap.png")
 plt.close(fig3)
 
@@ -210,7 +215,7 @@ for sentiment, count in sentiment_dist.items():
     print(f"   {sentiment}: {count} ({count/len(pairs_df)*100:.1f}%)")
 
 # Сохраняем все пары для детального анализа
-pairs_df.to_csv('strategy_sentiment_pairs.csv', index=False)
+pairs_df.to_csv(str(result("strategy_sentiment_pairs.csv")), index=False)
 print(f"\n✅ Все пары сохранены в: strategy_sentiment_pairs.csv")
 
 print("\n" + "="*80)

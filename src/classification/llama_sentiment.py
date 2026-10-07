@@ -1,26 +1,31 @@
 """
-Test script for determining sentiment (emotional tone) through Ollama with batch dialog processing.
-Similar to test_batch_interest.py, but for determining sentiment (Task 1) instead of interest (Task 2).
+Task 1: classify the sentiment (negative / neutral / positive) of every persuadee message.
+Sends one LLM request per dialog via Ollama, same batching approach as llama_interest.py.
 
 Usage:
-    python bsp2/test_batch_sentiment.py
+    python src/classification/llama_sentiment.py
 
 What it does:
-    1. Loads full_dialog.csv
+    1. Loads data/raw/full_dialog.csv
     2. Groups by dialogs (B2)
     3. For each dialog, finds all target messages (B4=1)
     4. Sends batch request to Ollama to analyze all target messages in the dialog
     5. Determines sentiment: negative, neutral, or positive
-    6. Saves results to test_batch_sentiment_results.csv
+    6. Saves results to data/interim/test_batch_sentiment_results.csv
 
 Results:
     - sentiment_ollama: category name ("negative", "neutral", or "positive")
 
 Settings:
-    - OLLAMA_URL: Ollama server URL (default: http://localhost:11434/api/chat)
-    - OLLAMA_MODEL: Ollama model (default: gpt-oss:20b, can be set via environment variable)
+    - OLLAMA_URL: Ollama server URL (default: http://localhost:11434/api/chat, override with the OLLAMA_URL environment variable)
+    - OLLAMA_MODEL: Ollama model (default: gpt-oss:20b, override with the OLLAMA_MODEL environment variable)
     - REQUEST_TIMEOUT: request timeout in seconds (default: 600)
 """
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import FULL_DIALOG, SENTIMENT_RESULTS  # noqa: E402
+
 import pandas as pd
 import requests
 import json
@@ -47,16 +52,16 @@ SENTIMENT_CATEGORIES = {
 }
 
 # Ollama configuration
-OLLAMA_URL = "http://localhost:11434/api/chat"
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/chat")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gpt-oss:20b")
 REQUEST_TIMEOUT = 600  # Increased timeout for batch requests (10 minutes)
 
 # Load data
 print("Loading data...")
 # Try to load existing results if they exist
-if os.path.exists("test_batch_sentiment_results.csv"):
+if os.path.exists(str(SENTIMENT_RESULTS)):
     print("   Found results file, loading it...")
-    df = pd.read_csv("test_batch_sentiment_results.csv")
+    df = pd.read_csv(str(SENTIMENT_RESULTS))
     # Restore empty strings to NaN for proper checking
     if "sentiment_ollama" in df.columns:
         df["sentiment_ollama"] = df["sentiment_ollama"].replace("", pd.NA)
@@ -68,7 +73,7 @@ if os.path.exists("test_batch_sentiment_results.csv"):
         df["sentiment_ollama_v2"] = df["sentiment_ollama_v2"].replace("", pd.NA)
 else:
     print("   Results file not found, loading source data...")
-    df = pd.read_csv("full_dialog.csv")
+    df = pd.read_csv(str(FULL_DIALOG))
     # Create columns for sentiment if they don't exist
     if "sentiment_ollama" not in df.columns:
         df["sentiment_ollama"] = None
@@ -378,7 +383,7 @@ END_JSON"""
             
             # Save every 20 dialogs
             if processed_dialogs % 20 == 0:
-                output_file = "test_batch_sentiment_results.csv"
+                output_file = str(SENTIMENT_RESULTS)
                 df_save = df.copy()
                 
                 # For target (B4=1) leave as is - don't fill empty values with fillna
@@ -409,7 +414,7 @@ END_JSON"""
         continue
 
 # Final save
-output_file = "test_batch_sentiment_results.csv"
+output_file = str(SENTIMENT_RESULTS)
 df_save = df.copy()
 
 # Clear values for persuader (B4=0) - sentiment only for target (for both columns)

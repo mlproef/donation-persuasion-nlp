@@ -1,91 +1,34 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
 *.egg-info/
-dist/
 build/
+dist/
 
-# Virtual Environment
+# Virtual environments
 venv/
+.venv/
 env/
-ENV/
-.venv
 
-# IDE
+# Editors / OS
 .vscode/
 .idea/
 *.swp
-*.swo
-*~
 .DS_Store
 
-# Intermediate/Test files
-test_*.csv
-test_*.py
-*_backup_*.csv
-*_temp.csv
-*_mock.csv
-test_*.sh
+# Data that is not redistributed or is regenerated
+data/raw/
+data/interim/
 
-# Intermediate annotation files
-reaction_annotation.csv
-reaction_annotation_context.csv
-reaction_annotation_context_balanced.csv
-potential_refusals_for_labeling.csv
-potential_refusals_top100.csv
-potential_refusals_top100_with_context.csv
-annotation_samples.csv
-
-# Intermediate analysis files (keep only final summaries)
-reaction_mismatches.csv
-clustered_messages*.csv
-cluster_*.csv
-full_dialog_with_reactions.csv
-full_dialog_with_calibrated_reactions.csv
-full_dialog_with_reactions_manual.csv
-full_dialog_with_strategies_top1.csv
-full_dialog_with_nli_strategies.csv
-full_dialog_with_ollama_strategies_temp.csv
-strategies_B4_0.csv
-strategies_B4_0_top1.csv
-unprocessed_messages.csv
-
-# Model checkpoints (keep only best_model)
-roberta_reaction_classifier/checkpoint-*/
+# Model weights and checkpoints
+*.safetensors
+*.bin
 *.ckpt
 *.pth
+*.joblib
 
-# Large model files - too big for GitHub (476MB)
-# Model should be downloaded separately or trained
-roberta_reaction_classifier/best_model/*.safetensors
-roberta_reaction_classifier/best_model/*.bin
-
-# Temporary files
+# Logs and run artefacts
 *.log
+*.pid
 *.tmp
 *.bak
-*.cache
-
-# Data files (keep only final merged results and summaries)
-full_info.csv
-full_dialog.csv
-reaction_annotation_labeled1.csv
-reaction_annotation_labeled_with_context.csv
-reaction_annotation_labeled.numbers
-potential_refusals_top100_done.csv
-test_batch_results.csv
-test_batch_results_single.csv
-test_batch_sentiment_results.csv
-test_batch_interest_results.csv
-test_fixed.csv
-test_strategy.csv
-test_ollama_strategies*.csv
-test_write_verification.csv
-missmathces_with_willing.csv
-
-# Keep only final analysis results
-# Final summaries and stats are included
-# Final visualizations are included

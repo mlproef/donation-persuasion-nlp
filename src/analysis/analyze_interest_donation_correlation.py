@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import FULL_INFO, INTEREST_RESULTS, figure, interim, result  # noqa: E402
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -10,8 +15,8 @@ print("="*80)
 
 # Загружаем данные
 print("\n1. Загружаем данные...")
-interest_df = pd.read_csv("test_batch_interest_results.csv")
-info_df = pd.read_csv("full_info.csv")
+interest_df = pd.read_csv(str(INTEREST_RESULTS))
+info_df = pd.read_csv(str(FULL_INFO))
 
 # Очищаем данные interest
 interest_df["interest_ollama_v2"] = interest_df["interest_ollama_v2"].replace("", pd.NA).replace("nan", pd.NA).replace("None", pd.NA)
@@ -83,7 +88,7 @@ for dialog_id in target_interest['B2'].unique():
     })
 
 dialog_stats_df = pd.DataFrame(dialog_interest_stats)
-dialog_stats_df.to_csv("interest_donation_by_dialog.csv", index=False)
+dialog_stats_df.to_csv(str(interim("interest_donation_by_dialog.csv")), index=False)
 print(f"   ✅ Статистика по диалогам сохранена в: interest_donation_by_dialog.csv")
 
 # ========= 1. DONATION RATE BY MAXIMUM INTEREST LEVEL =========
@@ -176,7 +181,7 @@ summary_stats = {
 
 summary_df = pd.DataFrame(summary_stats)
 print("\n" + summary_df.to_string(index=False))
-summary_df.to_csv("interest_donation_summary.csv", index=False)
+summary_df.to_csv(str(result("interest_donation_summary.csv")), index=False)
 print(f"\n✅ Сводная статистика сохранена в: interest_donation_summary.csv")
 
 # ========= 5. ВИЗУАЛИЗАЦИЯ =========
@@ -211,7 +216,7 @@ for bar, rate, label in zip(bars, donation_rates, interest_order):
              ha='center', va='top', fontsize=10, style='italic')
 
 plt.tight_layout()
-plt.savefig("interest_donation_rate_by_level.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("interest_donation_rate_by_level.png")), dpi=300, bbox_inches='tight')
 print(f"✅ График 1 сохранен: interest_donation_rate_by_level.png")
 plt.close(fig1)
 
@@ -243,7 +248,7 @@ ax2.set_xlabel('Donation Outcome', fontsize=11, fontweight='bold')
 ax2.set_ylabel('Interest Level', fontsize=11, fontweight='bold')
 
 plt.tight_layout()
-plt.savefig("interest_donation_contingency_matrix.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("interest_donation_contingency_matrix.png")), dpi=300, bbox_inches='tight')
 print(f"✅ График 2 сохранен: interest_donation_contingency_matrix.png")
 plt.close(fig2)
 
@@ -274,7 +279,7 @@ ax3.set_xlabel('Donation Outcome', fontsize=11, fontweight='bold')
 ax3.set_ylabel('Refusal Status', fontsize=11, fontweight='bold')
 
 plt.tight_layout()
-plt.savefig("refusals_donation_contingency_matrix.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("refusals_donation_contingency_matrix.png")), dpi=300, bbox_inches='tight')
 print(f"✅ График 3 сохранен: refusals_donation_contingency_matrix.png")
 plt.close(fig3)
 

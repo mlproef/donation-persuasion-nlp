@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import INTEREST_RESULTS, figure, result  # noqa: E402
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -10,7 +15,7 @@ print("="*80)
 
 # Load data
 print("\n1. Loading data...")
-df = pd.read_csv("test_batch_interest_results.csv")
+df = pd.read_csv(str(INTEREST_RESULTS))
 
 # Convert empty strings to NaN for proper checking
 if "interest_ollama_v2" in df.columns:
@@ -62,7 +67,7 @@ interest_details = pd.DataFrame({
     'count': interest_counts.values,
     'percentage': (interest_counts.values / total * 100).round(2)
 })
-interest_details.to_csv("interest_v2_details.csv", index=False)
+interest_details.to_csv(str(result("interest_v2_details.csv")), index=False)
 print(f"\n✅ Detailed statistics saved to: interest_v2_details.csv")
 
 # ========= 2. LABEL DISTRIBUTION =========
@@ -125,7 +130,7 @@ for label in coverage_labels:
     if count > 0:
         print(f"   {label}: {count} диалогов")
 
-dialog_df.to_csv("interest_v2_dialog_stats.csv", index=False)
+dialog_df.to_csv(str(result("interest_v2_dialog_stats.csv")), index=False)
 print(f"\n✅ Статистика по диалогам сохранена в: interest_v2_dialog_stats.csv")
 
 # ========= 4. INTEREST ПО ПОЗИЦИИ В ДИАЛОГЕ =========
@@ -211,8 +216,8 @@ ax4.grid(axis='y', alpha=0.3)
 ax4.set_ylim([0, 100])
 
 plt.tight_layout()
-plt.savefig("interest_v2_analysis_en.png", dpi=300, bbox_inches='tight')
-print(f"✅ Визуализация сохранена в: interest_v2_analysis_en.png")
+plt.savefig(str(figure("interest_v2_analysis.png")), dpi=300, bbox_inches='tight')
+print(f"✅ Визуализация сохранена в: interest_v2_analysis.png")
 
 # ========= 6. СВОДНАЯ СТАТИСТИКА =========
 print("\n" + "="*80)
@@ -242,7 +247,7 @@ summary = {
 
 summary_df = pd.DataFrame(summary)
 print("\n" + summary_df.to_string(index=False))
-summary_df.to_csv("interest_v2_summary.csv", index=False)
+summary_df.to_csv(str(result("interest_v2_summary.csv")), index=False)
 print(f"\n✅ Сводная статистика сохранена в: interest_v2_summary.csv")
 
 print("\n" + "="*80)

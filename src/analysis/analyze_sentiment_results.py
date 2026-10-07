@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import SENTIMENT_RESULTS, figure, result  # noqa: E402
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -10,7 +15,7 @@ print("="*80)
 
 # Load data
 print("\n1. Loading data...")
-df = pd.read_csv("test_batch_sentiment_results.csv")
+df = pd.read_csv(str(SENTIMENT_RESULTS))
 
 print(f"   - Total rows: {len(df):,}")
 print(f"   - Target messages (B4=1): {len(df[df['B4'] == 1]):,}")
@@ -20,8 +25,8 @@ print(f"   - Persuader messages (B4=0): {len(df[df['B4'] == 0]):,}")
 target_messages = df[df['B4'] == 1].copy()
 
 sentiment_filled = target_messages[
-    target_messages['sentiment_ollama'].notna() & 
-    (target_messages['sentiment_ollama'].astype(str).str.strip() != '')
+    target_messages['sentiment_ollama_v2'].notna() & 
+    (target_messages['sentiment_ollama_v2'].astype(str).str.strip() != '')
 ]
 
 print(f"\n2. Sentiment statistics:")
@@ -36,7 +41,7 @@ print("SENTIMENT DISTRIBUTION")
 print("="*80)
 
 if len(sentiment_filled) > 0:
-    sentiment_counts = sentiment_filled['sentiment_ollama'].value_counts()
+    sentiment_counts = sentiment_filled['sentiment_ollama_v2'].value_counts()
     print(f"\nTotal unique sentiments: {len(sentiment_counts)}")
     print(f"\nDistribution:")
     
@@ -63,7 +68,7 @@ for dialog_id in target_messages['B2'].unique():
         'total_messages': len(dialog_data),
         'messages_with_sentiment': len(dialog_sentiment),
         'coverage_pct': len(dialog_sentiment) / len(dialog_data) * 100 if len(dialog_data) > 0 else 0,
-        'unique_sentiments': dialog_sentiment['sentiment_ollama'].nunique() if len(dialog_sentiment) > 0 else 0,
+        'unique_sentiments': dialog_sentiment['sentiment_ollama_v2'].nunique() if len(dialog_sentiment) > 0 else 0,
     })
 
 dialog_df = pd.DataFrame(dialog_stats)
@@ -102,7 +107,7 @@ if len(sentiment_filled) > 0:
     for position in ['First', 'Early (2-3)', 'Middle (4-6)', 'Late (7+)']:
         pos_data = sentiment_filled[sentiment_filled['position'] == position]
         if len(pos_data) > 0:
-            sentiment_dist = pos_data['sentiment_ollama'].value_counts()
+            sentiment_dist = pos_data['sentiment_ollama_v2'].value_counts()
             print(f"\n   {position}:")
             for sentiment, count in sentiment_dist.items():
                 pct = count / len(pos_data) * 100
@@ -160,7 +165,7 @@ if len(sentiment_filled) > 0:
     # График 4: Sentiment по позиции в диалоге
     if len(sentiment_filled) > 0:
         ax4 = plt.subplot(2, 3, 4)
-        position_sentiment = pd.crosstab(sentiment_filled['position'], sentiment_filled['sentiment_ollama'])
+        position_sentiment = pd.crosstab(sentiment_filled['position'], sentiment_filled['sentiment_ollama_v2'])
         position_sentiment.plot(kind='bar', ax=ax4, color=[colors.get(c, 'gray') for c in position_sentiment.columns], width=0.8)
         ax4.set_xlabel('Position in Dialog')
         ax4.set_ylabel('Count')
@@ -173,7 +178,7 @@ if len(sentiment_filled) > 0:
     # Считаем средний sentiment для каждого диалога (negative=-1, neutral=0, positive=1)
     dialog_sentiment_scores = []
     for dialog_id in dialog_df['B2']:
-        dialog_sentiment = sentiment_filled[sentiment_filled['B2'] == dialog_id]['sentiment_ollama']
+        dialog_sentiment = sentiment_filled[sentiment_filled['B2'] == dialog_id]['sentiment_ollama_v2']
         if len(dialog_sentiment) > 0:
             score = (dialog_sentiment == 'positive').sum() - (dialog_sentiment == 'negative').sum()
             dialog_sentiment_scores.append(score / len(dialog_sentiment))
@@ -196,7 +201,7 @@ if len(sentiment_filled) > 0:
     ax6.grid(True, alpha=0.3)
     
     plt.tight_layout()
-    output_file = "sentiment_analysis.png"
+    output_file = str(figure("sentiment_v2_analysis.png"))
     plt.savefig(output_file, dpi=300, bbox_inches='tight')
     print(f"\nChart saved: {output_file}")
 else:
@@ -211,7 +216,7 @@ print("="*80)
 if len(sentiment_filled) > 0:
     sentiment_details = []
     for sentiment in sentiment_counts.index:
-        sentiment_data = sentiment_filled[sentiment_filled['sentiment_ollama'] == sentiment]
+        sentiment_data = sentiment_filled[sentiment_filled['sentiment_ollama_v2'] == sentiment]
         sentiment_details.append({
             'sentiment': sentiment,
             'count': len(sentiment_data),
@@ -221,12 +226,12 @@ if len(sentiment_filled) > 0:
         })
     
     sentiment_details_df = pd.DataFrame(sentiment_details).sort_values('count', ascending=False)
-    sentiment_details_df.to_csv('sentiment_details.csv', index=False)
-    print(f"Sentiment details saved: sentiment_details.csv")
+    sentiment_details_df.to_csv(str(result("sentiment_v2_details.csv")), index=False)
+    print(f"Sentiment details saved: sentiment_v2_details.csv")
 
 # Dialog statistics
-dialog_df.to_csv('sentiment_dialog_stats.csv', index=False)
-print(f"Dialog statistics saved: sentiment_dialog_stats.csv")
+dialog_df.to_csv(str(result("sentiment_v2_dialog_stats.csv")), index=False)
+print(f"Dialog statistics saved: sentiment_v2_dialog_stats.csv")
 
 # Сводная статистика
 summary = {
@@ -261,8 +266,8 @@ if len(sentiment_filled) > 0:
         summary['Value'].append(f"{sentiment_counts[sentiment]/len(sentiment_filled)*100:.2f}%")
 
 summary_df = pd.DataFrame(summary)
-summary_df.to_csv('sentiment_summary.csv', index=False)
-print(f"Summary statistics saved: sentiment_summary.csv")
+summary_df.to_csv(str(result("sentiment_v2_summary.csv")), index=False)
+print(f"Summary statistics saved: sentiment_v2_summary.csv")
 
 print("\n" + "="*80)
 print("ANALYSIS COMPLETED")

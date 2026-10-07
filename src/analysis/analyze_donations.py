@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import FULL_DIALOG, FULL_INFO, figure  # noqa: E402
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -11,8 +16,8 @@ rcParams['font.size'] = 12
 
 # Загружаем данные
 print("Загружаем данные...")
-info_df = pd.read_csv("full_info.csv")
-dialog_df = pd.read_csv("full_dialog.csv")
+info_df = pd.read_csv(str(FULL_INFO))
+dialog_df = pd.read_csv(str(FULL_DIALOG))
 
 print(f"Загружено {len(info_df)} записей в full_info.csv")
 print(f"Загружено {len(dialog_df)} сообщений в full_dialog.csv")
@@ -203,7 +208,7 @@ fig.suptitle('АНАЛИЗ БАЗЫ ДАННЫХ: СТАТИСТИКА ПО ДО
              fontsize=18, fontweight='bold', y=0.98)
 
 # Сохраняем как изображение
-output_file = 'donation_analysis.png'
+output_file = str(figure("donation_analysis.png"))
 plt.savefig(output_file, dpi=300, bbox_inches='tight', facecolor='white')
 print(f"\n✓ Визуализация сохранена в: {output_file}")
 
@@ -267,7 +272,7 @@ for bar, value in zip(bars, dialog_stats.values()):
             ha='center', va='bottom', fontsize=12, fontweight='bold')
 
 plt.tight_layout()
-output_file2 = 'donation_analysis_detailed.png'
+output_file2 = str(figure("donation_analysis_detailed.png"))
 plt.savefig(output_file2, dpi=300, bbox_inches='tight', facecolor='white')
 print(f"✓ Детальная визуализация сохранена в: {output_file2}")
 

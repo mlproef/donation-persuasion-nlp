@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import FULL_INFO, INTEREST_RESULTS, SENTIMENT_RESULTS, STRATEGY_RESULTS, figure, result  # noqa: E402
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -18,10 +23,10 @@ SELECTED_STRATEGIES = [
 
 # Загружаем данные
 print("\n1. Загружаем данные...")
-strategies_df = pd.read_csv("test_batch_results_single.csv")
-sentiment_df = pd.read_csv("test_batch_sentiment_results.csv")
-interest_df = pd.read_csv("test_batch_interest_results.csv")
-info_df = pd.read_csv("full_info.csv")
+strategies_df = pd.read_csv(str(STRATEGY_RESULTS))
+sentiment_df = pd.read_csv(str(SENTIMENT_RESULTS))
+interest_df = pd.read_csv(str(INTEREST_RESULTS))
+info_df = pd.read_csv(str(FULL_INFO))
 
 # Очищаем данные
 strategies_df["strategy_ollama_single"] = strategies_df["strategy_ollama_single"].replace("", pd.NA)
@@ -191,7 +196,7 @@ for strategy in SELECTED_STRATEGIES:
 joint_stats_df = pd.DataFrame(joint_stats)
 
 # Сохраняем статистику
-joint_stats_df.to_csv('joint_strategies_stats.csv', index=False)
+joint_stats_df.to_csv(str(result("joint_strategies_stats.csv")), index=False)
 print(f"✅ Статистика сохранена в: joint_strategies_stats.csv")
 
 # ========= 7. ВИЗУАЛИЗАЦИЯ =========
@@ -296,7 +301,7 @@ for i, strategy in enumerate(SELECTED_STRATEGIES):
                 ha='center', va='bottom', fontsize=8)
 
 plt.tight_layout()
-plt.savefig("joint_strategies_effect.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("joint_strategies_effect.png")), dpi=300, bbox_inches='tight')
 print(f"✅ Визуализация сохранена в: joint_strategies_effect.png")
 plt.close()
 

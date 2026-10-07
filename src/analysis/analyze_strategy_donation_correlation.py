@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import FULL_INFO, STRATEGY_RESULTS, figure, result  # noqa: E402
+
 import pandas as pd
 import numpy as np
 import matplotlib
@@ -10,8 +15,8 @@ print("="*80)
 
 # Загружаем данные
 print("\n1. Загружаем данные...")
-strategies_df = pd.read_csv("test_batch_results_single.csv")
-info_df = pd.read_csv("full_info.csv")
+strategies_df = pd.read_csv(str(STRATEGY_RESULTS))
+info_df = pd.read_csv(str(FULL_INFO))
 
 # Очищаем данные стратегий
 strategies_df["strategy_ollama_single"] = strategies_df["strategy_ollama_single"].replace("", pd.NA)
@@ -114,7 +119,7 @@ for strategy in pairs_df['strategy'].unique():
     strategy_stats.append(stats)
 
 strategy_stats_df = pd.DataFrame(strategy_stats).sort_values('total_pairs', ascending=False)
-strategy_stats_df.to_csv('strategy_donation_stats.csv', index=False)
+strategy_stats_df.to_csv(str(result("strategy_donation_stats.csv")), index=False)
 print(f"\n✅ Статистика сохранена в: strategy_donation_stats.csv")
 
 # Топ-10 стратегий с наибольшим процентом донатов
@@ -155,7 +160,7 @@ for i, (idx, row) in enumerate(top_donated_plot.iterrows()):
     ax1.text(row['donated_pct'], i, f" {row['donated_pct']:.1f}% (n={int(row['total_pairs'])})", 
              va='center', fontsize=9)
 plt.tight_layout()
-plt.savefig("strategies_leading_to_donation.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("strategies_leading_to_donation.png")), dpi=300, bbox_inches='tight')
 print(f"✅ График 1 сохранен: strategies_leading_to_donation.png")
 plt.close(fig1)
 
@@ -175,7 +180,7 @@ for i, (idx, row) in enumerate(top_no_donation_plot.iterrows()):
     ax2.text(row['no_donation_pct'], i, f" {row['no_donation_pct']:.1f}% (n={int(row['total_pairs'])})", 
              va='center', fontsize=9)
 plt.tight_layout()
-plt.savefig("strategies_leading_to_no_donation.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("strategies_leading_to_no_donation.png")), dpi=300, bbox_inches='tight')
 print(f"✅ График 2 сохранен: strategies_leading_to_no_donation.png")
 plt.close(fig2)
 
@@ -206,7 +211,7 @@ ax3.set_title('Strategy × Donation Correlation Matrix (Top-20 Strategies)', fon
 ax3.set_xlabel('Donation Outcome', fontsize=12, fontweight='bold')
 ax3.set_ylabel('Strategy', fontsize=12, fontweight='bold')
 plt.tight_layout()
-plt.savefig("strategy_donation_heatmap.png", dpi=300, bbox_inches='tight')
+plt.savefig(str(figure("strategy_donation_heatmap.png")), dpi=300, bbox_inches='tight')
 print(f"✅ График 3 сохранен: strategy_donation_heatmap.png")
 plt.close(fig3)
 
@@ -224,7 +229,7 @@ for donated, count in donation_dist.items():
     print(f"   {label}: {count} ({count/len(pairs_df)*100:.1f}%)")
 
 # Сохраняем все пары для детального анализа
-pairs_df.to_csv('strategy_donation_pairs.csv', index=False)
+pairs_df.to_csv(str(result("strategy_donation_pairs.csv")), index=False)
 print(f"\n✅ Все пары сохранены в: strategy_donation_pairs.csv")
 
 # ========= 5. СТАТИСТИКА ДЛЯ КАЖДОГО ГРАФИКА =========

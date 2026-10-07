@@ -1,3 +1,26 @@
+"""
+Task 3: label every persuader message with one persuasion strategy.
+
+Hierarchical prompting via Ollama: the LLM first picks one of 12 categories,
+then a specific strategy inside it (taxonomy in strategies_hierarchical.py).
+
+Usage:
+    python src/classification/llama_strategies.py
+
+Input:  data/raw/full_dialog.csv
+Output: data/interim/test_batch_results_single.csv  (column strategy_ollama_single)
+
+Settings (environment variables):
+    OLLAMA_URL    Ollama chat endpoint (default: http://localhost:11434/api/chat)
+    OLLAMA_MODEL  model name (default: qwen3:30b)
+
+Progress is saved periodically, so an interrupted run resumes where it stopped.
+"""
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import FULL_DIALOG, STRATEGY_RESULTS  # noqa: E402
+
 import pandas as pd
 import requests
 import json
@@ -21,14 +44,14 @@ REQUEST_TIMEOUT = 600  # Increased timeout for batch requests (10 minutes)
 # Load data
 print("Loading data...")
 # Try to load existing results if they exist
-if os.path.exists("test_batch_results_single.csv"):
+if os.path.exists(str(STRATEGY_RESULTS)):
     print("   Found results file, loading it...")
-    df = pd.read_csv("test_batch_results_single.csv")
+    df = pd.read_csv(str(STRATEGY_RESULTS))
     # Restore empty strings to NaN for proper checking
     df["strategy_ollama_single"] = df["strategy_ollama_single"].replace("", pd.NA)
 else:
     print("   Results file not found, loading source data...")
-    df = pd.read_csv("full_dialog.csv")
+    df = pd.read_csv(str(FULL_DIALOG))
     # Create column for strategies if it doesn't exist
     if "strategy_ollama_single" not in df.columns:
         df["strategy_ollama_single"] = None
@@ -117,7 +140,7 @@ print(f"Skipped (empty messages): {skipped_empty}\n")
 def save_progress():
     """Saves current progress to file"""
     global df
-    output_file = "test_batch_results_single.csv"
+    output_file = str(STRATEGY_RESULTS)
     df_save = df.copy()
     df_save["strategy_ollama_single"] = df_save["strategy_ollama_single"].fillna("")
     df_save.to_csv(output_file, index=False)

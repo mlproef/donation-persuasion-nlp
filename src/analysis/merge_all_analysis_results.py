@@ -1,3 +1,8 @@
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import ALL_ANALYSIS, FULL_DIALOG, INTEREST_RESULTS, SENTIMENT_RESULTS, STRATEGY_RESULTS  # noqa: E402
+
 import pandas as pd
 import os
 
@@ -7,18 +12,18 @@ print("="*80)
 
 # Load base dialog file
 print("\n1. Loading base dialog file...")
-if not os.path.exists("full_dialog.csv"):
+if not os.path.exists(str(FULL_DIALOG)):
     print("❌ Error: full_dialog.csv not found!")
     exit(1)
 
-df_base = pd.read_csv("full_dialog.csv")
+df_base = pd.read_csv(str(FULL_DIALOG))
 print(f"   ✅ Loaded full_dialog.csv: {len(df_base)} rows, {len(df_base.columns)} columns")
 print(f"   Columns: {list(df_base.columns)}")
 
 # Load strategy results
 print("\n2. Loading strategy results...")
-if os.path.exists("test_batch_results_single.csv"):
-    df_strategies = pd.read_csv("test_batch_results_single.csv")
+if os.path.exists(str(STRATEGY_RESULTS)):
+    df_strategies = pd.read_csv(str(STRATEGY_RESULTS))
     print(f"   ✅ Loaded test_batch_results_single.csv: {len(df_strategies)} rows")
     
     # Select only strategy column and merge keys
@@ -35,8 +40,8 @@ else:
 
 # Load sentiment results
 print("\n3. Loading sentiment results...")
-if os.path.exists("test_batch_sentiment_results.csv"):
-    df_sentiment = pd.read_csv("test_batch_sentiment_results.csv")
+if os.path.exists(str(SENTIMENT_RESULTS)):
+    df_sentiment = pd.read_csv(str(SENTIMENT_RESULTS))
     print(f"   ✅ Loaded test_batch_sentiment_results.csv: {len(df_sentiment)} rows")
     
     # Select only sentiment_v2 column and merge keys
@@ -53,8 +58,8 @@ else:
 
 # Load interest results
 print("\n4. Loading interest results...")
-if os.path.exists("test_batch_interest_results.csv"):
-    df_interest = pd.read_csv("test_batch_interest_results.csv")
+if os.path.exists(str(INTEREST_RESULTS)):
+    df_interest = pd.read_csv(str(INTEREST_RESULTS))
     print(f"   ✅ Loaded test_batch_interest_results.csv: {len(df_interest)} rows")
     
     # Select only interest_v2 columns and merge keys
@@ -124,7 +129,7 @@ if df_interest_merge is not None:
 
 # Save merged dataset
 print("\n6. Saving merged dataset...")
-output_file = "full_dialog_with_all_analysis.csv"
+output_file = str(ALL_ANALYSIS)
 df_merged.to_csv(output_file, index=False)
 print(f"   ✅ Saved to: {output_file}")
 print(f"   Total rows: {len(df_merged)}")

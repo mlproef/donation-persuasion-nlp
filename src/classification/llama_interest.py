@@ -1,27 +1,32 @@
 """
-Test script for determining interest in donation through Ollama with batch dialog processing.
-Similar to test_batch_raw_response.py, but for determining interest (Task 2) instead of strategies (Task 3).
+Task 2: classify how interested the persuadee is in donating (Not Interested / Neutral / Interested).
+Sends one LLM request per dialog via Ollama, so the model sees the full conversation context.
 
 Usage:
-    python bsp2/test_batch_interest.py
+    python src/classification/llama_interest.py
 
 What it does:
-    1. Loads full_dialog.csv
+    1. Loads data/raw/full_dialog.csv
     2. Groups by dialogs (B2)
     3. For each dialog, finds all target messages (B4=1)
     4. Sends batch request to Ollama to analyze all target messages in the dialog
     5. Determines interest: 0 (refusal), 1 (neutral), 2 (interested)
-    6. Saves results to test_batch_interest_results.csv
+    6. Saves results to data/interim/test_batch_interest_results.csv
 
 Results:
     - interest_ollama: category name ("Not Interested", "Neutral", or "Interested")
     - interest_label_ollama: numeric label (0, 1, or 2)
 
 Settings:
-    - OLLAMA_URL: Ollama server URL (default: http://localhost:11434/api/chat)
-    - OLLAMA_MODEL: Ollama model (default: qwen3:30b, can be set via environment variable)
+    - OLLAMA_URL: Ollama server URL (default: http://localhost:11434/api/chat, override with the OLLAMA_URL environment variable)
+    - OLLAMA_MODEL: Ollama model (default: gpt-oss:20b, override with the OLLAMA_MODEL environment variable)
     - REQUEST_TIMEOUT: request timeout in seconds (default: 600)
 """
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))  # make src/ importable
+from paths import FULL_DIALOG, INTEREST_RESULTS  # noqa: E402
+
 import pandas as pd
 import requests
 import json
@@ -79,16 +84,16 @@ INTEREST_INFO = [
 ]
 
 # Ollama configuration
-OLLAMA_URL = "http://localhost:11434/api/chat"
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/chat")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "gpt-oss:20b")
 REQUEST_TIMEOUT = 600  # Increased timeout for batch requests (10 minutes)
 
 # Load data
 print("Loading data...")
 # Try to load existing results if they exist
-if os.path.exists("test_batch_interest_results.csv"):
+if os.path.exists(str(INTEREST_RESULTS)):
     print("   Found results file, loading it...")
-    df = pd.read_csv("test_batch_interest_results.csv")
+    df = pd.read_csv(str(INTEREST_RESULTS))
     # Create columns for interest (new columns with _v2 suffix) if they don't exist
     if "interest_ollama_v2" not in df.columns:
         df["interest_ollama_v2"] = None
@@ -99,7 +104,7 @@ if os.path.exists("test_batch_interest_results.csv"):
     df["interest_label_ollama_v2"] = df["interest_label_ollama_v2"].replace("", pd.NA)
 else:
     print("   Results file not found, loading source data...")
-    df = pd.read_csv("full_dialog.csv")
+    df = pd.read_csv(str(FULL_DIALOG))
     # Create columns for interest (new columns with _v2 suffix)
     if "interest_ollama_v2" not in df.columns:
         df["interest_ollama_v2"] = None
@@ -437,7 +442,7 @@ Now analyze the messages and return the JSON:"""
             
             # Save every 20 dialogs
             if processed_dialogs % 20 == 0:
-                output_file = "test_batch_interest_results.csv"
+                output_file = str(INTEREST_RESULTS)
                 df_save = df.copy()
                 
                 # Clear values for persuader (B4=0) - interest only for target (new _v2 columns)
@@ -471,7 +476,7 @@ Now analyze the messages and return the JSON:"""
         continue
 
 # Final save
-output_file = "test_batch_interest_results.csv"
+output_file = str(INTEREST_RESULTS)
 df_save = df.copy()
 
 # Clear values for persuader (B4=0) - interest only for target (new _v2 columns)

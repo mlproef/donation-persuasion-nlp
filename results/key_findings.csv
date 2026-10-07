@@ -1,0 +1,8 @@
+grouping,group,dialogs,donation_rate_pct
+Highest interest reached,Neutral,119,36.1
+Highest interest reached,Interested,896,74.6
+Dominant sentiment,Negative,25,40.0
+Dominant sentiment,Neutral,552,65.2
+Dominant sentiment,Positive,440,77.5
+Persuadee refused at least once,Yes,404,58.2
+Persuadee refused at least once,No,613,77.7
